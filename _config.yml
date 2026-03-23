@@ -3,6 +3,11 @@
 # Edit these values to update site-wide content
 # ──────────────────────────────────────────────
 
+# IMPORTANT: change this to match your repo name
+# e.g. "/raglab-site" if your repo is github.com/you/raglab-site
+# Set to "" if using a custom domain or yourname.github.io repo
+baseurl: "/raglab-site"
+
 title: "raglab_"
 tagline: "building RAG pipelines in public"
 description: >-

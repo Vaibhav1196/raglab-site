@@ -4,9 +4,13 @@ Your Jekyll-powered landing page. Edit YAML files, push to GitHub, site updates 
 
 ## Quick start
 
-1. Push this folder to a GitHub repo
-2. Go to repo **Settings → Pages → Source** → select `main` branch
-3. Your site is live at `https://yourname.github.io/repo-name`
+1. Create a **public** GitHub repo (e.g., `raglab-site`)
+2. Push this folder's contents to it
+3. Go to repo **Settings → Pages → Source** → select `main` branch, `/ (root)`
+4. Wait ~60 seconds
+5. Your site is live at `https://yourname.github.io/raglab-site`
+
+**Important:** Make sure `baseurl` in `_config.yml` matches your repo name (e.g., `/raglab-site`). If you later use a custom domain or a `yourname.github.io` repo, set it to `""`.
 
 ## How to update content
 
