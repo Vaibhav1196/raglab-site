@@ -1,0 +1,38 @@
+# ──────────────────────────────────────────────
+# Demo cards — your live experiments
+# ──────────────────────────────────────────────
+# status options: live, wip, planned
+# Add a new demo by copying a block and editing
+# ──────────────────────────────────────────────
+
+- title: "Chunking Strategies Compared"
+  status: live
+  description: "Same docs, 5 different chunking methods. See how fixed-size, recursive, semantic, sentence, and document-level chunking affect retrieval quality."
+  tags:
+    - langchain
+    - FAISS
+  url: "https://huggingface.co/spaces/yourname/chunking-demo"
+
+- title: "Embedding Model Showdown"
+  status: live
+  description: "Query the same corpus with OpenAI, Cohere, BGE, and all-MiniLM embeddings side-by-side. Compare relevance scores and retrieval order."
+  tags:
+    - sentence-transformers
+    - chromadb
+  url: "https://huggingface.co/spaces/yourname/embedding-demo"
+
+- title: "Reranker Impact Test"
+  status: wip
+  description: "Does a reranker actually help? Compare raw retrieval vs. Cohere Rerank vs. cross-encoder reranking on the same queries."
+  tags:
+    - cross-encoder
+    - cohere
+  url: "#"
+
+- title: "Hybrid Search: Dense + Sparse"
+  status: planned
+  description: "BM25 meets vector search. Testing fusion strategies to see when hybrid beats pure semantic retrieval."
+  tags:
+    - BM25
+    - reciprocal rank fusion
+  url: "#"

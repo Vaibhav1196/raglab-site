@@ -1,0 +1,49 @@
+# ──────────────────────────────────────────────
+# raglab_ site config
+# Edit these values to update site-wide content
+# ──────────────────────────────────────────────
+
+title: "raglab_"
+tagline: "building RAG pipelines in public"
+description: >-
+  One person building RAG pipelines from scratch,
+  experimenting with every model, strategy, and trick —
+  and letting you try each one live.
+
+# Your personal links (leave blank to hide)
+github_url: "https://github.com/yourname/hybrid-rag-lab"
+huggingface_url: "https://huggingface.co/yourname"
+twitter_url: "https://twitter.com/yourname"
+author_handle: "@yourname"
+
+# Hero terminal lines — edit these to change the intro
+hero_lines:
+  - type: command
+    text: "cat README.md"
+  - type: heading
+    text: "# raglab_"
+  - type: output
+    text: "One person building RAG pipelines from scratch,"
+  - type: output
+    text: "experimenting with every model, strategy, and trick —"
+  - type: output_highlight
+    text: "and letting you try each one live."
+  - type: comment
+    text: "# not a product. not a startup. just a lab."
+  - type: comment
+    text: "# everything is open. everything is documented."
+  - type: comment
+    text: "# if it breaks, you'll see that too."
+  - type: command_cursor
+    text: "raglab --list-experiments"
+
+# Newsletter text
+newsletter_comment: "// get notified when I ship new experiments"
+newsletter_text: "No spam. Just a short email when a new demo goes live or when I find something interesting."
+
+# Build settings (don't touch unless you know what you're doing)
+markdown: kramdown
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock

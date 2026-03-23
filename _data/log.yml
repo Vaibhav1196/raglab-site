@@ -1,0 +1,36 @@
+# ──────────────────────────────────────────────
+# Build log — your experiment diary
+# ──────────────────────────────────────────────
+# type options: experiment, finding, fix, release
+# Newest entries at the top
+# ──────────────────────────────────────────────
+
+- date: "2026-03-22"
+  type: experiment
+  message: "tested semantic chunking with all-MiniLM — 12% recall improvement over fixed 512"
+  link_text: "→ notes"
+  link_url: "#"
+
+- date: "2026-03-20"
+  type: finding
+  message: "embedding dim 384 vs 1536: negligible quality diff on small corpora, 4x speed gain"
+  link_text: "→ notes"
+  link_url: "#"
+
+- date: "2026-03-18"
+  type: release
+  message: "deployed chunking comparison demo to HF Spaces — live now"
+  link_text: "→ demo"
+  link_url: "#"
+
+- date: "2026-03-15"
+  type: fix
+  message: "FAISS index was silently dropping metadata on docs > 4k tokens. patched."
+  link_text: "→ commit"
+  link_url: "#"
+
+- date: "2026-03-12"
+  type: experiment
+  message: "first pass at embedding model comparison — 4 models, 200 queries, measuring MRR@10"
+  link_text: "→ notes"
+  link_url: "#"

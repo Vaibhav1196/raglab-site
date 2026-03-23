@@ -1,0 +1,166 @@
+---
+layout: default
+---
+
+<!-- ═══════════════ TOP BAR ═══════════════ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo">{{ site.title }}</span>
+    <span class="topbar-sep">|</span>
+    <span class="topbar-status"><span class="status-dot"></span> {{ site.tagline }}</span>
+  </div>
+  <div class="topbar-links">
+    <a href="#demos">demos</a>
+    <a href="#log">build log</a>
+    <a href="#arch">how it works</a>
+    {% if site.github_url %}<a href="{{ site.github_url }}" target="_blank">github ↗</a>{% endif %}
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════ HERO TERMINAL ═══════════════ -->
+  <section class="hero">
+    <div class="terminal">
+      <div class="term-header">
+        <div class="term-dot r"></div>
+        <div class="term-dot y"></div>
+        <div class="term-dot g"></div>
+        <span>~/raglab</span>
+      </div>
+      <div class="term-body">
+        {% for line in site.hero_lines %}
+        <div class="term-line">
+          {% case line.type %}
+            {% when 'command' %}
+              <span class="prompt">$</span> {{ line.text }}
+            {% when 'command_cursor' %}
+              <span class="prompt">$</span> raglab <span class="flag">--list-experiments</span><span class="cursor"></span>
+            {% when 'heading' %}
+              <span class="highlight">{{ line.text }}</span>
+            {% when 'output' %}
+              <span class="output">{{ line.text }}</span>
+            {% when 'output_highlight' %}
+              <span class="output">{{ line.text | replace: 'try each one live', '<span class="highlight">try each one live</span>' }}</span>
+            {% when 'comment' %}
+              <span class="comment">{{ line.text }}</span>
+            {% when 'blank' %}
+              &nbsp;
+          {% endcase %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ LIVE DEMOS ═══════════════ -->
+  <!-- Data source: _data/demos.yml -->
+  <section class="section" id="demos">
+    <div class="section-head">
+      <div class="comment-line">// experiments you can run right now</div>
+      <h2><span class="accent">$</span> live demos</h2>
+    </div>
+    <div class="demos-grid">
+      {% for demo in site.data.demos %}
+      <div class="demo-card">
+        <div class="card-status {{ demo.status }}">
+          <span class="status-dot-card"></span> {{ demo.status }}
+        </div>
+        <h3>{{ demo.title }}</h3>
+        <p>{{ demo.description }}</p>
+        <div class="card-footer">
+          {% for tag in demo.tags %}
+          <span class="card-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        {% if demo.status == 'live' %}
+          <a href="{{ demo.url }}" class="try-btn" target="_blank">→ try it on HF Spaces</a>
+        {% elsif demo.status == 'wip' %}
+          <a href="{{ demo.url }}" class="try-btn wip">→ preview (wip)</a>
+        {% else %}
+          <span class="try-btn planned">coming soon</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ═══════════════ BUILD LOG ═══════════════ -->
+  <!-- Data source: _data/log.yml -->
+  <section class="section" id="log">
+    <div class="section-head">
+      <div class="comment-line">// what I've been working on</div>
+      <h2><span class="accent">$</span> git log <span style="color:var(--text-dim)">--oneline</span></h2>
+    </div>
+    <div class="log-entries">
+      {% for entry in site.data.log %}
+      <div class="log-entry">
+        <span class="log-date">{{ entry.date }}</span>
+        <span class="log-type {{ entry.type }}">
+          {% case entry.type %}
+            {% when 'experiment' %}exper.
+            {% when 'finding' %}finding
+            {% when 'fix' %}fix
+            {% when 'release' %}release
+          {% endcase %}
+        </span>
+        <span class="log-msg">{{ entry.message }}</span>
+        {% if entry.link_url %}
+          <a href="{{ entry.link_url }}" class="log-link">{{ entry.link_text }}</a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ═══════════════ ARCHITECTURE ═══════════════ -->
+  <!-- Data source: _data/architecture.yml -->
+  <section class="section" id="arch">
+    <div class="section-head">
+      <div class="comment-line">{{ site.data.architecture.section_comment }}</div>
+      <h2><span class="accent">$</span> {{ site.data.architecture.section_title }}</h2>
+    </div>
+    <div class="arch-box">
+      <pre>{{ site.data.architecture.ascii_art }}</pre>
+    </div>
+  </section>
+
+  <!-- ═══════════════ GET INVOLVED ═══════════════ -->
+  <!-- Data source: _data/involved.yml -->
+  <section class="section">
+    <div class="section-head">
+      <div class="comment-line">// ways to follow along or contribute</div>
+      <h2><span class="accent">$</span> get involved</h2>
+    </div>
+    <div class="involved-grid">
+      {% for card in site.data.involved %}
+      <div class="involved-card">
+        <span class="ic-icon">{{ card.icon }}</span>
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ═══════════════ NEWSLETTER ═══════════════ -->
+  <section class="newsletter">
+    <div class="comment-line" style="color:var(--comment);font-size:12px;margin-bottom:8px;">{{ site.newsletter_comment }}</div>
+    <p>{{ site.newsletter_text }}</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="you@email.com">
+      <button>subscribe</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <span>{{ site.title }} — built in public by <a href="{{ site.twitter_url }}">{{ site.author_handle }}</a></span>
+  <div class="footer-links">
+    {% if site.github_url %}<a href="{{ site.github_url }}" target="_blank">github</a>{% endif %}
+    {% if site.huggingface_url %}<a href="{{ site.huggingface_url }}" target="_blank">huggingface</a>{% endif %}
+    {% if site.twitter_url %}<a href="{{ site.twitter_url }}" target="_blank">twitter</a>{% endif %}
+  </div>
+</footer>
