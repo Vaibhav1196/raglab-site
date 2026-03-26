@@ -570,10 +570,10 @@ print(f&quot;  TOTAL: {response.trace.total_duration_ms:.1f}ms&quot;)
   <section class="newsletter">
     <div class="comment-line" style="color:var(--comment);font-size:12px;margin-bottom:8px;">// get notified when I ship new pipeline stages</div>
     <p>No spam. Just a short email when a new stage goes live or when I find something worth sharing.</p>
-    <div class="newsletter-form">
-      <input type="email" placeholder="you@email.com">
-      <button>subscribe</button>
-    </div>
+    <form class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/ragforge" method="post" target="popupwindow">
+      <input type="email" name="email" placeholder="you@email.com" required>
+      <button type="submit">subscribe</button>
+    </form>
   </section>
 
 </div>

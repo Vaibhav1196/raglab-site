@@ -161,10 +161,10 @@ layout: default
   <section class="newsletter">
     <div class="comment-line" style="color:var(--comment);font-size:12px;margin-bottom:8px;">{{ site.newsletter_comment }}</div>
     <p>{{ site.newsletter_text }}</p>
-    <div class="newsletter-form">
-      <input type="email" placeholder="you@email.com">
-      <button>subscribe</button>
-    </div>
+    <form class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/ragforge" method="post" target="popupwindow">
+      <input type="email" name="email" placeholder="you@email.com" required>
+      <button type="submit">subscribe</button>
+    </form>
   </section>
 
 </div>
