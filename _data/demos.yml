@@ -1,38 +1,41 @@
 # ──────────────────────────────────────────────
-# Demo cards — your live experiments
+# Live Demos — HuggingFace Spaces
 # ──────────────────────────────────────────────
-# status options: live, wip, planned
-# Add a new demo by copying a block and editing
+# status: live | wip | planned
+# Set demo_url when you deploy to HF Spaces
 # ──────────────────────────────────────────────
 
-- title: "Chunking Strategies Compared"
-  status: live
-  description: "Same docs, 5 different chunking methods. See how fixed-size, recursive, semantic, sentence, and document-level chunking affect retrieval quality."
-  tags:
-    - langchain
-    - FAISS
-  url: "https://huggingface.co/spaces/yourname/chunking-demo"
-
-- title: "Embedding Model Showdown"
-  status: live
-  description: "Query the same corpus with OpenAI, Cohere, BGE, and all-MiniLM embeddings side-by-side. Compare relevance scores and retrieval order."
-  tags:
-    - sentence-transformers
-    - chromadb
-  url: "https://huggingface.co/spaces/yourname/embedding-demo"
-
-- title: "Reranker Impact Test"
-  status: wip
-  description: "Does a reranker actually help? Compare raw retrieval vs. Cohere Rerank vs. cross-encoder reranking on the same queries."
-  tags:
-    - cross-encoder
-    - cohere
-  url: "#"
-
-- title: "Hybrid Search: Dense + Sparse"
+- title: "Hybrid Retrieval Comparison"
   status: planned
-  description: "BM25 meets vector search. Testing fusion strategies to see when hybrid beats pure semantic retrieval."
+  description: "BM25 vs Dense vs Hybrid (RRF) side by side. Upload docs or use the sample corpus, query all three methods, compare ranked results."
   tags:
     - BM25
-    - reciprocal rank fusion
-  url: "#"
+    - FAISS
+    - RRF
+  demo_url: ""
+
+- title: "Reranker Impact Test"
+  status: planned
+  description: "See how cross-encoder reranking reorders hybrid results. Compare before/after rankings on the same query."
+  tags:
+    - cross-encoder
+    - ms-marco-MiniLM
+  demo_url: ""
+
+- title: "Retrieval Evaluation Dashboard"
+  status: planned
+  description: "Run the eval suite live. See Hit Rate, MRR, Recall@k across all pipeline tiers on different eval datasets."
+  tags:
+    - Hit Rate
+    - MRR
+    - Recall@k
+  demo_url: ""
+
+- title: "End-to-End RAG Playground"
+  status: planned
+  description: "Full pipeline: upload docs → retrieve → generate answer with citations. Inspect the PipelineTrace for latency breakdown."
+  tags:
+    - RAGPipeline
+    - ContextBuilder
+    - PipelineTrace
+  demo_url: ""

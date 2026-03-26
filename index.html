@@ -11,22 +11,24 @@ layout: default
   </div>
   <div class="topbar-links">
     <a href="#demos">demos</a>
-    <a href="#log">build log</a>
-    <a href="#arch">how it works</a>
+    <a href="#examples">examples</a>
+    <a href="#log">log</a>
+    <a href="#roadmap">roadmap</a>
+    <a href="{{ '/docs' | relative_url }}">docs</a>
     {% if site.github_url %}<a href="{{ site.github_url }}" target="_blank">github ↗</a>{% endif %}
   </div>
 </div>
 
 <div class="container">
 
-  <!-- ═══════════════ HERO TERMINAL ═══════════════ -->
+  <!-- ═══════════════ HERO ═══════════════ -->
   <section class="hero">
     <div class="terminal">
       <div class="term-header">
         <div class="term-dot r"></div>
         <div class="term-dot y"></div>
         <div class="term-dot g"></div>
-        <span>~/raglab</span>
+        <span>~/hybrid-rag-lab</span>
       </div>
       <div class="term-body">
         {% for line in site.hero_lines %}
@@ -35,13 +37,13 @@ layout: default
             {% when 'command' %}
               <span class="prompt">$</span> {{ line.text }}
             {% when 'command_cursor' %}
-              <span class="prompt">$</span> raglab <span class="flag">--list-experiments</span><span class="cursor"></span>
+              <span class="prompt">$</span> raglab <span class="flag">--list-stages</span><span class="cursor"></span>
             {% when 'heading' %}
               <span class="highlight">{{ line.text }}</span>
             {% when 'output' %}
               <span class="output">{{ line.text }}</span>
             {% when 'output_highlight' %}
-              <span class="output">{{ line.text | replace: 'try each one live', '<span class="highlight">try each one live</span>' }}</span>
+              <span class="highlight">{{ line.text }}</span>
             {% when 'comment' %}
               <span class="comment">{{ line.text }}</span>
             {% when 'blank' %}
@@ -54,10 +56,9 @@ layout: default
   </section>
 
   <!-- ═══════════════ LIVE DEMOS ═══════════════ -->
-  <!-- Data source: _data/demos.yml -->
   <section class="section" id="demos">
     <div class="section-head">
-      <div class="comment-line">// experiments you can run right now</div>
+      <div class="comment-line">// try ragforge in the browser — no install needed</div>
       <h2><span class="accent">$</span> live demos</h2>
     </div>
     <div class="demos-grid">
@@ -73,10 +74,8 @@ layout: default
           <span class="card-tag">{{ tag }}</span>
           {% endfor %}
         </div>
-        {% if demo.status == 'live' %}
-          <a href="{{ demo.url }}" class="try-btn" target="_blank">→ try it on HF Spaces</a>
-        {% elsif demo.status == 'wip' %}
-          <a href="{{ demo.url }}" class="try-btn wip">→ preview (wip)</a>
+        {% if demo.demo_url != "" %}
+          <a href="{{ demo.demo_url }}" class="try-btn" target="_blank">→ try on HF Spaces</a>
         {% else %}
           <span class="try-btn planned">coming soon</span>
         {% endif %}
@@ -85,11 +84,32 @@ layout: default
     </div>
   </section>
 
+  <!-- ═══════════════ EXAMPLES ═══════════════ -->
+  <section class="section" id="examples">
+    <div class="section-head">
+      <div class="comment-line">// copy-paste recipes</div>
+      <h2><span class="accent">$</span> examples</h2>
+      <p class="sub">Want the full API reference and installation guide? <a href="{{ '/docs' | relative_url }}">Read the docs →</a></p>
+    </div>
+
+    {% for ex in site.data.examples %}
+    <div class="example-block">
+      <div class="example-header">
+        <h3>{{ ex.title }}</h3>
+        <p>{{ ex.description }}</p>
+      </div>
+      <div class="code-block">
+        <div class="code-label {{ ex.lang }}">{{ ex.lang }}</div>
+        <pre>{{ ex.code_html }}</pre>
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
   <!-- ═══════════════ BUILD LOG ═══════════════ -->
-  <!-- Data source: _data/log.yml -->
   <section class="section" id="log">
     <div class="section-head">
-      <div class="comment-line">// what I've been working on</div>
+      <div class="comment-line">// what's been built</div>
       <h2><span class="accent">$</span> git log <span style="color:var(--text-dim)">--oneline</span></h2>
     </div>
     <div class="log-entries">
@@ -102,45 +122,39 @@ layout: default
             {% when 'finding' %}finding
             {% when 'fix' %}fix
             {% when 'release' %}release
+            {% when 'milestone' %}v0.1.0
           {% endcase %}
         </span>
         <span class="log-msg">{{ entry.message }}</span>
         {% if entry.link_url %}
-          <a href="{{ entry.link_url }}" class="log-link">{{ entry.link_text }}</a>
+          <a href="{{ entry.link_url }}" class="log-link" target="_blank">{{ entry.link_text }}</a>
         {% endif %}
       </div>
       {% endfor %}
     </div>
   </section>
 
-  <!-- ═══════════════ ARCHITECTURE ═══════════════ -->
-  <!-- Data source: _data/architecture.yml -->
-  <section class="section" id="arch">
+  <!-- ═══════════════ ROADMAP ═══════════════ -->
+  <section class="section" id="roadmap">
     <div class="section-head">
-      <div class="comment-line">{{ site.data.architecture.section_comment }}</div>
-      <h2><span class="accent">$</span> {{ site.data.architecture.section_title }}</h2>
+      <div class="comment-line">// where ragforge is headed</div>
+      <h2><span class="accent">$</span> roadmap</h2>
     </div>
-    <div class="arch-box">
-      <pre>{{ site.data.architecture.ascii_art }}</pre>
-    </div>
-  </section>
 
-  <!-- ═══════════════ GET INVOLVED ═══════════════ -->
-  <!-- Data source: _data/involved.yml -->
-  <section class="section">
-    <div class="section-head">
-      <div class="comment-line">// ways to follow along or contribute</div>
-      <h2><span class="accent">$</span> get involved</h2>
-    </div>
-    <div class="involved-grid">
-      {% for card in site.data.involved %}
-      <div class="involved-card">
-        <span class="ic-icon">{{ card.icon }}</span>
-        <h3>{{ card.title }}</h3>
-        <p>{{ card.description }}</p>
+    {% assign horizons = "next|later|research" | split: "|" %}
+    {% for h in horizons %}
+    <div class="roadmap-group">
+      <div class="roadmap-horizon">{{ h }}</div>
+      {% for item in site.data.roadmap %}
+      {% if item.horizon == h %}
+      <div class="roadmap-item">
+        <span class="roadmap-title">{{ item.title }}</span>
+        <span class="roadmap-desc">{{ item.description }}</span>
       </div>
+      {% endif %}
       {% endfor %}
     </div>
+    {% endfor %}
   </section>
 
   <!-- ═══════════════ NEWSLETTER ═══════════════ -->

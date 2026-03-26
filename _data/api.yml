@@ -1,0 +1,149 @@
+# ──────────────────────────────────────────────
+# API Reference — ragforge modules
+# ──────────────────────────────────────────────
+# Each module lists its classes/functions with
+# short descriptions. Add new entries as you
+# build new features.
+# ──────────────────────────────────────────────
+
+- module: "ragforge.core.schemas"
+  description: "Shared data objects — the common language of the whole system."
+  source: "src/ragforge/core/schemas.py"
+  members:
+    - name: "Document"
+      kind: "dataclass"
+      description: "A fully loaded source document with doc_id, text, and metadata."
+    - name: "Chunk"
+      kind: "dataclass"
+      description: "A smaller piece of a Document. Carries chunk_id, doc_id, text, and metadata including chunk_index."
+    - name: "RetrievalResult"
+      kind: "dataclass"
+      description: "A ranked result from any retriever. Contains the Chunk, a float score, and the source method name."
+
+- module: "ragforge.core.telemetry"
+  description: "Lightweight observability — per-stage latency tracking."
+  source: "src/ragforge/core/telemetry.py"
+  members:
+    - name: "StageTiming"
+      kind: "dataclass"
+      description: "A single (stage_name, duration_ms) timing entry."
+    - name: "PipelineTrace"
+      kind: "dataclass"
+      description: "Collects StageTiming entries and arbitrary metadata. Use .add_stage() to record, .total_duration_ms to sum."
+
+- module: "ragforge.ingestion"
+  description: "Document loading and chunking."
+  source: "src/ragforge/ingestion/"
+  members:
+    - name: "load_text_documents(data_dir)"
+      kind: "function"
+      description: "Load all .txt files from a directory into Document objects. Skips empty files. Returns list[Document]."
+    - name: "chunk_text(text, chunk_size, overlap)"
+      kind: "function"
+      description: "Split a string into overlapping character-based chunks. Returns list[str]."
+    - name: "chunk_documents(documents, chunk_size, overlap)"
+      kind: "function"
+      description: "Convert list[Document] into list[Chunk], preserving doc_id lineage and chunk_index in metadata."
+
+- module: "ragforge.retrieval.bm25"
+  description: "Sparse retrieval using BM25 probabilistic ranking."
+  source: "src/ragforge/retrieval/bm25.py"
+  members:
+    - name: "tokenize(text)"
+      kind: "function"
+      description: "Lowercase whitespace tokenizer for BM25 indexing."
+    - name: "BM25Retriever"
+      kind: "class"
+      description: "Sparse retriever wrapping rank_bm25.BM25Okapi. Initialize with chunks, call .search(query, top_k) to retrieve."
+
+- module: "ragforge.retrieval.dense"
+  description: "Dense semantic retrieval using embeddings + FAISS."
+  source: "src/ragforge/retrieval/dense.py"
+  members:
+    - name: "DenseRetriever"
+      kind: "class"
+      description: "Vector search over chunk embeddings. Initialize with chunks + a TextEmbedder. Call .search(query, top_k) to retrieve by cosine similarity."
+
+- module: "ragforge.retrieval.embeddings"
+  description: "Embedding interfaces and implementations."
+  source: "src/ragforge/retrieval/embeddings.py"
+  members:
+    - name: "TextEmbedder"
+      kind: "protocol"
+      description: "Interface for any embedding model. Must implement .encode(texts) → np.ndarray. Swap in OpenAI, Cohere, or any provider."
+    - name: "SentenceTransformerEmbedder"
+      kind: "class"
+      description: "Concrete embedder wrapping sentence-transformers. Default model: all-MiniLM-L6-v2 (384d). Outputs normalized float32 vectors."
+
+- module: "ragforge.retrieval.fusion"
+  description: "Reciprocal Rank Fusion for combining retriever outputs."
+  source: "src/ragforge/retrieval/fusion.py"
+  members:
+    - name: "reciprocal_rank_fusion(result_lists, top_k, k)"
+      kind: "function"
+      description: "Merge multiple ranked lists using RRF. Combines ranks, not scores. Formula: score = Σ 1/(k + rank). Default k=60."
+
+- module: "ragforge.retrieval.reranking"
+  description: "Cross-encoder reranking for precision-optimized results."
+  source: "src/ragforge/retrieval/reranking.py"
+  members:
+    - name: "QueryDocumentScorer"
+      kind: "protocol"
+      description: "Interface for scoring (query, document) pairs. Must implement .score(query, texts) → list[float]."
+    - name: "CrossEncoderScorer"
+      kind: "class"
+      description: "Concrete scorer wrapping cross-encoder models. Default: ms-marco-MiniLM-L-6-v2."
+    - name: "RetrievalReranker"
+      kind: "class"
+      description: "Reranks a list of RetrievalResults using a QueryDocumentScorer. Call .rerank(query, results, top_k)."
+
+- module: "ragforge.retrieval.pipeline"
+  description: "Ready-to-use retrieval pipelines combining all components."
+  source: "src/ragforge/retrieval/pipeline.py"
+  members:
+    - name: "BM25Pipeline"
+      kind: "class"
+      description: "End-to-end sparse retrieval. Build with .from_directory(path) or .from_documents(docs). Call .search(query, top_k)."
+    - name: "DensePipeline"
+      kind: "class"
+      description: "End-to-end dense retrieval. Same interface. Accepts optional custom TextEmbedder."
+    - name: "HybridPipeline"
+      kind: "class"
+      description: "BM25 + Dense + RRF fusion. The core hybrid retriever. Accepts rrf_k parameter."
+    - name: "RerankedHybridPipeline"
+      kind: "class"
+      description: "HybridPipeline + cross-encoder reranking. The most complete retrieval pipeline. Accepts candidate_top_k for the reranking pool size."
+
+- module: "ragforge.generation"
+  description: "Context construction and LLM-based answer generation."
+  source: "src/ragforge/generation/"
+  members:
+    - name: "ContextBuilder"
+      kind: "class"
+      description: "Assembles retrieval results into prompt-ready context with citation IDs. Respects max_chunks and max_chars budget."
+    - name: "ChatLLM"
+      kind: "protocol"
+      description: "Interface for chat LLMs. Must implement .generate(system_prompt, user_prompt) → LLMResponse."
+    - name: "ExtractiveFallbackLLM"
+      kind: "class"
+      description: "Offline-safe fallback that extracts answers from context without an external API."
+    - name: "OpenAICompatibleLLM"
+      kind: "class"
+      description: "Minimal client for any OpenAI-compatible API. Uses stdlib only (no openai package needed)."
+    - name: "RAGPipeline"
+      kind: "class"
+      description: "End-to-end retrieval → context → generation pipeline. Call .answer(query) to get a GenerationResponse with trace."
+
+- module: "ragforge.evaluation"
+  description: "Retrieval and answer quality evaluation."
+  source: "src/ragforge/evaluation/"
+  members:
+    - name: "evaluate_retrieval(pipeline, samples, top_k)"
+      kind: "function"
+      description: "Evaluate a retrieval pipeline on labeled queries. Returns RetrievalEvaluationReport with Hit Rate@k, MRR@k, Recall@k."
+    - name: "evaluate_answer_heuristics(sample, response)"
+      kind: "function"
+      description: "Fast heuristic checks: answer_present, cites_context, grounded_to_relevant_context, reference_term_overlap."
+    - name: "build_llm_judge_prompts(sample, response)"
+      kind: "function"
+      description: "Build rubric prompt for LLM-as-judge scoring (groundedness, correctness, completeness, overall)."

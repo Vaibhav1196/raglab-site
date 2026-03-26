@@ -1,52 +1,49 @@
 # ──────────────────────────────────────────────
 # raglab_ site config
-# Edit these values to update site-wide content
 # ──────────────────────────────────────────────
-
-# IMPORTANT: change this to match your repo name
-# e.g. "/raglab-site" if your repo is github.com/you/raglab-site
-# Set to "" if using a custom domain or yourname.github.io repo
+# IMPORTANT: change baseurl to match your repo name
 baseurl: "/raglab-site"
 
 title: "raglab_"
 tagline: "building RAG pipelines in public"
 description: >-
-  One person building RAG pipelines from scratch,
-  experimenting with every model, strategy, and trick —
-  and letting you try each one live.
+  One person building a hybrid RAG framework from scratch —
+  ragforge — and documenting every step. Read the code,
+  try the demos, learn the architecture.
 
-# Your personal links (leave blank to hide)
-github_url: "https://github.com/Vaibhav1196"
-huggingface_url: "https://huggingface.co/bot-propagation"
-twitter_url: "https://x.com/Vaibhave1013430"
-author_handle: "@Vaibhav Elangovan"
+# Your links
+github_url: "https://github.com/Vaibhav1196/hybrid-rag-lab"
+huggingface_url: "https://huggingface.co/yourname"
+twitter_url: "https://twitter.com/yourname"
+author_handle: "@vaibhav"
 
-# Hero terminal lines — edit these to change the intro
+# Hero terminal
 hero_lines:
   - type: command
-    text: "cat README.md"
+    text: "pip install ragforge"
+  - type: blank
   - type: heading
-    text: "# raglab_"
+    text: "# ragforge"
   - type: output
-    text: "One person building RAG pipelines from scratch,"
+    text: "hybrid RAG framework for Python."
   - type: output
-    text: "experimenting with every model, strategy, and trick —"
+    text: "BM25 + Dense + RRF Fusion + Cross-Encoder Reranking."
   - type: output_highlight
-    text: "and letting you try each one live."
+    text: "evaluation suite. observability. protocol-based. swappable."
+  - type: blank
   - type: comment
-    text: "# not a product. not a startup. just a lab."
+    text: "# v0.1.0 — src-layout package, 13 test files, CLI scripts"
   - type: comment
-    text: "# everything is open. everything is documented."
-  - type: comment
-    text: "# if it breaks, you'll see that too."
+    text: "# built in public at github.com/Vaibhav1196/hybrid-rag-lab"
+  - type: blank
   - type: command_cursor
-    text: "raglab --list-experiments"
+    text: "raglab --list-stages"
 
-# Newsletter text
-newsletter_comment: "// get notified when I ship new experiments"
-newsletter_text: "No spam. Just a short email when a new demo goes live or when I find something interesting."
+# Newsletter
+newsletter_comment: "// get notified when I ship new pipeline stages"
+newsletter_text: "No spam. Just a short email when a new stage goes live or when I find something worth sharing."
 
-# Build settings (don't touch unless you know what you're doing)
+# Build settings
 markdown: kramdown
 exclude:
   - README.md

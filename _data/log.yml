@@ -1,36 +1,46 @@
 # ──────────────────────────────────────────────
-# Build log — your experiment diary
+# Build log — newest at top
+# type: experiment | finding | fix | release | milestone
 # ──────────────────────────────────────────────
-# type options: experiment, finding, fix, release
-# Newest entries at the top
-# ──────────────────────────────────────────────
+
+- date: "2026-03-23"
+  type: milestone
+  message: "ragforge v0.1.0 — full hybrid RAG pipeline with evaluation suite and observability"
+  link_text: "→ repo"
+  link_url: "https://github.com/Vaibhav1196/hybrid-rag-lab"
+
+- date: "2026-03-23"
+  type: release
+  message: "30-page masterclass PDF published — 15 chapters covering the full architecture"
+  link_text: "→ PDF"
+  link_url: "https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/docs/hybrid_rag_masterclass.pdf"
 
 - date: "2026-03-22"
   type: experiment
-  message: "tested semantic chunking with all-MiniLM — 12% recall improvement over fixed 512"
-  link_text: "→ notes"
-  link_url: "#"
+  message: "dual answer evaluation — heuristic checks + LLM-as-judge with rubric prompts"
+  link_text: "→ source"
+  link_url: "https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/src/ragforge/evaluation/generation.py"
 
 - date: "2026-03-20"
   type: finding
-  message: "embedding dim 384 vs 1536: negligible quality diff on small corpora, 4x speed gain"
-  link_text: "→ notes"
-  link_url: "#"
+  message: "reranked hybrid hits MRR@5 = 1.00 on easy eval set vs BM25-only at 0.75"
+  link_text: "→ eval script"
+  link_url: "https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/scripts/run_retrieval_eval.py"
 
 - date: "2026-03-18"
-  type: release
-  message: "deployed chunking comparison demo to HF Spaces — live now"
-  link_text: "→ demo"
-  link_url: "#"
+  type: experiment
+  message: "PipelineTrace shows retrieval 12ms, context build 0.3ms, LLM generation dominates at 1.8s"
+  link_text: "→ telemetry"
+  link_url: "https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/src/ragforge/core/telemetry.py"
 
 - date: "2026-03-15"
-  type: fix
-  message: "FAISS index was silently dropping metadata on docs > 4k tokens. patched."
-  link_text: "→ commit"
-  link_url: "#"
+  type: release
+  message: "end-to-end RAG pipeline — ExtractiveFallbackLLM for offline + OpenAI-compatible client"
+  link_text: "→ source"
+  link_url: "https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/src/ragforge/generation/pipeline.py"
 
 - date: "2026-03-12"
   type: experiment
-  message: "first pass at embedding model comparison — 4 models, 200 queries, measuring MRR@10"
-  link_text: "→ notes"
-  link_url: "#"
+  message: "RRF fusion (k=60) on sample docs — hybrid retrieval hits 100% recall vs BM25's 88%"
+  link_text: "→ source"
+  link_url: "https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/src/ragforge/retrieval/fusion.py"

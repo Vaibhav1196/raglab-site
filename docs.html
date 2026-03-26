@@ -1,0 +1,119 @@
+---
+layout: default
+permalink: /docs
+---
+
+<!-- ═══════════════ TOP BAR ═══════════════ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo"><a href="{{ '/' | relative_url }}" style="color:var(--green);">{{ site.title }}</a></span>
+    <span class="topbar-sep">|</span>
+    <span class="topbar-status" style="color:var(--text-bright);">docs</span>
+  </div>
+  <div class="topbar-links">
+    <a href="#quickstart">quickstart</a>
+    <a href="#api">api reference</a>
+    <a href="{{ '/' | relative_url }}">← home</a>
+    {% if site.github_url %}<a href="{{ site.github_url }}" target="_blank">github ↗</a>{% endif %}
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════ DOCS HERO ═══════════════ -->
+  <section class="hero" style="padding: 56px 0 40px;">
+    <div class="section-head" style="margin-bottom:0;">
+      <div class="comment-line">// ragforge library documentation</div>
+      <h2 style="font-size:22px;"><span class="accent">$</span> docs</h2>
+      <p class="sub">Installation, quick start, and full API reference for the ragforge package. <a href="{{ site.github_url }}/tree/main/src/ragforge" target="_blank">View source on GitHub →</a></p>
+    </div>
+  </section>
+
+  <!-- ═══════════════ QUICK START ═══════════════ -->
+  <section class="section" id="quickstart">
+    <div class="section-head">
+      <div class="comment-line">// get running in 2 minutes</div>
+      <h2><span class="accent">$</span> quick start</h2>
+    </div>
+
+    <div class="code-block">
+      <div class="code-label bash">install</div>
+      <pre>{{ site.data.quickstart.install_html }}</pre>
+    </div>
+
+    <div class="code-block" style="margin-top:16px;">
+      <div class="code-label python">{{ site.data.quickstart.example_title }}</div>
+      <pre>{{ site.data.quickstart.example_html }}</pre>
+    </div>
+
+    <div class="code-block" style="margin-top:16px;">
+      <div class="code-label output">output</div>
+      <pre class="output-pre">{{ site.data.quickstart.example_output }}</pre>
+    </div>
+
+    <div style="margin-top:24px;">
+      <div class="code-label" style="margin-bottom:12px;">{{ site.data.quickstart.cli_title }}</div>
+      {% for cmd in site.data.quickstart.cli_commands %}
+      <div class="cli-row">
+        <span class="cli-label">{{ cmd.label }}</span>
+        <code class="cli-cmd"><span class="syn-pr">$</span> {{ cmd.cmd }}</code>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ═══════════════ API REFERENCE ═══════════════ -->
+  <section class="section" id="api">
+    <div class="section-head">
+      <div class="comment-line">// ragforge module reference</div>
+      <h2><span class="accent">$</span> api reference</h2>
+      <p class="sub">Classes, functions, and protocols organized by module.</p>
+    </div>
+
+    <!-- Module nav -->
+    <div class="api-nav">
+      {% for mod in site.data.api %}
+      <a href="#{{ mod.module | slugify }}" class="api-nav-link">{{ mod.module | split: "." | last }}</a>
+      {% endfor %}
+    </div>
+
+    {% for mod in site.data.api %}
+    <div class="api-module" id="{{ mod.module | slugify }}">
+      <div class="api-module-header">
+        <h3>{{ mod.module }}</h3>
+        <a href="{{ site.github_url }}/tree/main/{{ mod.source }}" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">{{ mod.description }}</p>
+      <div class="api-members">
+        {% for member in mod.members %}
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>{{ member.name }}</code>
+            <span class="api-kind {{ member.kind }}">{{ member.kind }}</span>
+          </div>
+          <p>{{ member.description }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  <!-- ═══════════════ BACK TO HOME ═══════════════ -->
+  <section style="padding: 40px 0; text-align: center;">
+    <a href="{{ '/' | relative_url }}" style="font-size: 12px; color: var(--text-dim);">← back to raglab_ home</a>
+    <span style="color: var(--border); margin: 0 12px;">|</span>
+    <a href="{{ site.github_url }}" target="_blank" style="font-size: 12px; color: var(--text-dim);">view source on github →</a>
+  </section>
+
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <span>{{ site.title }} — built in public by <a href="{{ site.twitter_url }}">{{ site.author_handle }}</a></span>
+  <div class="footer-links">
+    {% if site.github_url %}<a href="{{ site.github_url }}" target="_blank">github</a>{% endif %}
+    {% if site.huggingface_url %}<a href="{{ site.huggingface_url }}" target="_blank">huggingface</a>{% endif %}
+    {% if site.twitter_url %}<a href="{{ site.twitter_url }}" target="_blank">twitter</a>{% endif %}
+  </div>
+</footer>

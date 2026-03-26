@@ -1,0 +1,40 @@
+# ──────────────────────────────────────────────
+# Roadmap — what's next for ragforge
+# ──────────────────────────────────────────────
+# horizon: now | next | later | research
+
+- title: "FastAPI HTTP server"
+  horizon: next
+  description: "Wrap the pipeline in an API. Query endpoint, health checks, structured JSON responses."
+
+- title: "Embedding cache"
+  horizon: next
+  description: "Cache embeddings to avoid re-embedding unchanged documents. FAISS or Qdrant backed."
+
+- title: "Advanced chunking"
+  horizon: next
+  description: "Sentence-aware, token-based, and semantic chunking strategies. Compare retrieval quality."
+
+- title: "PDF / HTML / Markdown ingestion"
+  horizon: next
+  description: "Support real-world document formats beyond .txt files."
+
+- title: "Query routing"
+  horizon: later
+  description: "Route keyword queries to BM25, semantic queries to dense retrieval automatically."
+
+- title: "Multi-agent orchestration"
+  horizon: later
+  description: "LangGraph integration — planner, retriever, and generator agents."
+
+- title: "OpenTelemetry export"
+  horizon: later
+  description: "Export PipelineTrace data to OpenTelemetry or LangSmith for production monitoring."
+
+- title: "HyDE (Hypothetical Document Embeddings)"
+  horizon: research
+  description: "Generate a hypothetical answer, embed it, use that for retrieval instead of the raw query."
+
+- title: "SPLADE / ColBERT"
+  horizon: research
+  description: "Learned sparse retrieval and late-interaction models as alternatives to BM25 + bi-encoder."

@@ -1,0 +1,39 @@
+# ──────────────────────────────────────────────
+# Quick start — installation + first example
+# ──────────────────────────────────────────────
+
+install_html: |
+  <span class="syn-pr">$</span> git clone <span class="syn-arg">https://github.com/Vaibhav1196/hybrid-rag-lab.git</span>
+  <span class="syn-pr">$</span> <span class="syn-fn">cd</span> hybrid-rag-lab
+  <span class="syn-pr">$</span> uv venv .venv <span class="syn-fl">--python</span> <span class="syn-num">3.11</span>
+  <span class="syn-pr">$</span> uv pip install <span class="syn-fl">-e</span> <span class="syn-str">".[dev]"</span>
+
+example_title: "run hybrid retrieval in 5 lines"
+example_html: |
+  <span class="syn-kw">from</span> <span class="syn-cls">ragforge.retrieval.pipeline</span> <span class="syn-kw">import</span> <span class="syn-cls">HybridPipeline</span>
+
+  pipeline <span class="syn-op">=</span> <span class="syn-cls">HybridPipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>, chunk_size<span class="syn-op">=</span><span class="syn-num">300</span>, overlap<span class="syn-op">=</span><span class="syn-num">50</span>)
+  results  <span class="syn-op">=</span> pipeline.<span class="syn-fn">search</span>(<span class="syn-str">"what is hybrid retrieval"</span>, top_k<span class="syn-op">=</span><span class="syn-num">3</span>)
+
+  <span class="syn-kw">for</span> r <span class="syn-kw">in</span> results:
+      <span class="syn-bi">print</span>(<span class="syn-str">f"</span><span class="syn-op">{</span>r.score<span class="syn-op">:</span><span class="syn-str">.4f</span><span class="syn-op">}</span>  <span class="syn-op">{</span>r.chunk.doc_id<span class="syn-op">}</span>  <span class="syn-op">{</span>r.chunk.text<span class="syn-op">[:</span><span class="syn-num">80</span><span class="syn-op">]}</span><span class="syn-str">..."</span>)
+
+example_output: |
+  0.0323  hybrid_retrieval  Hybrid retrieval combines sparse retrieval, such as BM25, with dense vector...
+  0.0161  rag               Retrieval-Augmented Generation, or RAG, is a pattern where a language model...
+  0.0161  langchain          LangChain is a framework designed to simplify the development of application...
+
+cli_title: "or use the CLI scripts"
+cli_commands:
+  - cmd: "uv run python scripts/run_bm25.py <span class=\"syn-fl\">--query</span> <span class=\"syn-str\">'hybrid retrieval'</span> <span class=\"syn-fl\">--top-k</span> <span class=\"syn-num\">3</span>"
+    label: "BM25 sparse retrieval"
+  - cmd: "uv run python scripts/run_dense.py <span class=\"syn-fl\">--query</span> <span class=\"syn-str\">'hybrid retrieval'</span> <span class=\"syn-fl\">--top-k</span> <span class=\"syn-num\">3</span>"
+    label: "Dense semantic retrieval"
+  - cmd: "uv run python scripts/run_hybrid.py <span class=\"syn-fl\">--query</span> <span class=\"syn-str\">'hybrid retrieval'</span> <span class=\"syn-fl\">--top-k</span> <span class=\"syn-num\">3</span>"
+    label: "Hybrid (BM25 + Dense + RRF)"
+  - cmd: "uv run python scripts/run_rerank.py <span class=\"syn-fl\">--query</span> <span class=\"syn-str\">'hybrid retrieval'</span> <span class=\"syn-fl\">--top-k</span> <span class=\"syn-num\">3</span>"
+    label: "Reranked hybrid"
+  - cmd: "uv run python scripts/run_rag.py <span class=\"syn-fl\">--query</span> <span class=\"syn-str\">'What is RAG?'</span> <span class=\"syn-fl\">--llm-mode</span> fallback"
+    label: "End-to-end RAG"
+  - cmd: "uv run pytest <span class=\"syn-fl\">-v</span>"
+    label: "Run test suite"
