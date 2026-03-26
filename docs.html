@@ -38,17 +38,17 @@ permalink: /docs
 
     <div class="code-block">
       <div class="code-label bash">install</div>
-      <pre>{{ site.data.quickstart.install_html }}</pre>
+      <pre><code class="lang-bash">{{ site.data.quickstart.install | xml_escape }}</code></pre>
     </div>
 
     <div class="code-block" style="margin-top:16px;">
       <div class="code-label python">{{ site.data.quickstart.example_title }}</div>
-      <pre>{{ site.data.quickstart.example_html }}</pre>
+      <pre><code class="lang-python">{{ site.data.quickstart.example | xml_escape }}</code></pre>
     </div>
 
     <div class="code-block" style="margin-top:16px;">
       <div class="code-label output">output</div>
-      <pre class="output-pre">{{ site.data.quickstart.example_output }}</pre>
+      <pre class="output-pre">{{ site.data.quickstart.example_output | xml_escape }}</pre>
     </div>
 
     <div style="margin-top:24px;">
@@ -56,7 +56,7 @@ permalink: /docs
       {% for cmd in site.data.quickstart.cli_commands %}
       <div class="cli-row">
         <span class="cli-label">{{ cmd.label }}</span>
-        <code class="cli-cmd"><span class="syn-pr">$</span> {{ cmd.cmd }}</code>
+        <code class="cli-cmd lang-bash-inline">{{ cmd.cmd | xml_escape }}</code>
       </div>
       {% endfor %}
     </div>
@@ -117,3 +117,31 @@ permalink: /docs
     {% if site.twitter_url %}<a href="{{ site.twitter_url }}" target="_blank">twitter</a>{% endif %}
   </div>
 </footer>
+
+<script>
+// Client-side Python syntax highlighter
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('code.lang-python').forEach(function(block) {
+    var html = block.innerHTML;
+    html = html.replace(/(#.*?)(\n|$)/g, '<span class="syn-cm">$1</span>$2');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/\b(from|import|for|in|if|else|elif|def|class|return|as|with|not|and|or|is|None|True|False)\b/g, '<span class="syn-kw">$1</span>');
+    html = html.replace(/\b(print|len|range|set|list|dict|tuple|int|float|str|type|sum|max|min|sorted|enumerate)\b/g, '<span class="syn-bi">$1</span>');
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="syn-num">$1</span>');
+    html = html.replace(/\.(\w+)\(/g, '.<span class="syn-fn">$1</span>(');
+    html = html.replace(/\b([A-Z][a-zA-Z]*(?:Pipeline|Builder|LLM|Embedder|Retriever|Reranker|Scorer|Result|Response|Trace|Timing|Snippet|Context|Document|Chunk|Report|Metrics|Sample))\b/g, '<span class="syn-cls">$1</span>');
+    block.innerHTML = html;
+  });
+
+  document.querySelectorAll('code.lang-bash, code.lang-bash-inline').forEach(function(block) {
+    var html = block.innerHTML;
+    html = html.replace(/^\$\s/gm, '<span class="syn-pr">$ </span>');
+    html = html.replace(/(--[\w-]+)/g, '<span class="syn-fl">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/(https?:\/\/\S+)/g, '<span class="syn-arg">$1</span>');
+    block.innerHTML = html;
+  });
+});
+</script>

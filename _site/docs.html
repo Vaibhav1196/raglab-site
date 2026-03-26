@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>raglab_ — building RAG pipelines in public</title>
+  <meta name="description" content="One person building a hybrid RAG framework from scratch — ragforge — and documenting every step. Read the code, try the demos, learn the architecture.">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/raglab-site/assets/css/style.css">
+</head>
+<body>
+  <!-- ═══════════════ TOP BAR ═══════════════ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo"><a href="/raglab-site/" style="color:var(--green);">raglab_</a></span>
+    <span class="topbar-sep">|</span>
+    <span class="topbar-status" style="color:var(--text-bright);">docs</span>
+  </div>
+  <div class="topbar-links">
+    <a href="#quickstart">quickstart</a>
+    <a href="#api">api reference</a>
+    <a href="/raglab-site/">← home</a>
+    <a href="https://github.com/Vaibhav1196/hybrid-rag-lab" target="_blank">github ↗</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════ DOCS HERO ═══════════════ -->
+  <section class="hero" style="padding: 56px 0 40px;">
+    <div class="section-head" style="margin-bottom:0;">
+      <div class="comment-line">// ragforge library documentation</div>
+      <h2 style="font-size:22px;"><span class="accent">$</span> docs</h2>
+      <p class="sub">Installation, quick start, and full API reference for the ragforge package. <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge" target="_blank">View source on GitHub →</a></p>
+    </div>
+  </section>
+
+  <!-- ═══════════════ QUICK START ═══════════════ -->
+  <section class="section" id="quickstart">
+    <div class="section-head">
+      <div class="comment-line">// get running in 2 minutes</div>
+      <h2><span class="accent">$</span> quick start</h2>
+    </div>
+
+    <div class="code-block">
+      <div class="code-label bash">install</div>
+      <pre><code class="lang-bash">$ git clone https://github.com/Vaibhav1196/hybrid-rag-lab.git
+$ cd hybrid-rag-lab
+$ uv venv .venv --python 3.11
+$ uv pip install -e &quot;.[dev]&quot;
+</code></pre>
+    </div>
+
+    <div class="code-block" style="margin-top:16px;">
+      <div class="code-label python">run hybrid retrieval in 5 lines</div>
+      <pre><code class="lang-python">from ragforge.retrieval.pipeline import HybridPipeline
+
+pipeline = HybridPipeline.from_directory(&quot;data/&quot;, chunk_size=300, overlap=50)
+results  = pipeline.search(&quot;what is hybrid retrieval&quot;, top_k=3)
+
+for r in results:
+    print(f&quot;{r.score:.4f}  {r.chunk.doc_id}  {r.chunk.text[:80]}...&quot;)
+</code></pre>
+    </div>
+
+    <div class="code-block" style="margin-top:16px;">
+      <div class="code-label output">output</div>
+      <pre class="output-pre">0.0323  hybrid_retrieval  Hybrid retrieval combines sparse retrieval, such as BM25...
+0.0161  rag               Retrieval-Augmented Generation, or RAG, is a pattern...
+0.0161  langchain          LangChain is a framework designed to simplify the...
+</pre>
+    </div>
+
+    <div style="margin-top:24px;">
+      <div class="code-label" style="margin-bottom:12px;">or use the CLI scripts</div>
+      
+      <div class="cli-row">
+        <span class="cli-label">BM25 sparse retrieval</span>
+        <code class="cli-cmd lang-bash-inline">uv run python scripts/run_bm25.py --query &apos;hybrid retrieval&apos; --top-k 3</code>
+      </div>
+      
+      <div class="cli-row">
+        <span class="cli-label">Dense semantic retrieval</span>
+        <code class="cli-cmd lang-bash-inline">uv run python scripts/run_dense.py --query &apos;hybrid retrieval&apos; --top-k 3</code>
+      </div>
+      
+      <div class="cli-row">
+        <span class="cli-label">Hybrid (BM25 + Dense + RRF)</span>
+        <code class="cli-cmd lang-bash-inline">uv run python scripts/run_hybrid.py --query &apos;hybrid retrieval&apos; --top-k 3</code>
+      </div>
+      
+      <div class="cli-row">
+        <span class="cli-label">Reranked hybrid</span>
+        <code class="cli-cmd lang-bash-inline">uv run python scripts/run_rerank.py --query &apos;hybrid retrieval&apos; --top-k 3</code>
+      </div>
+      
+      <div class="cli-row">
+        <span class="cli-label">End-to-end RAG</span>
+        <code class="cli-cmd lang-bash-inline">uv run python scripts/run_rag.py --query &apos;What is RAG?&apos; --llm-mode fallback</code>
+      </div>
+      
+      <div class="cli-row">
+        <span class="cli-label">Run test suite</span>
+        <code class="cli-cmd lang-bash-inline">uv run pytest -v</code>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- ═══════════════ API REFERENCE ═══════════════ -->
+  <section class="section" id="api">
+    <div class="section-head">
+      <div class="comment-line">// ragforge module reference</div>
+      <h2><span class="accent">$</span> api reference</h2>
+      <p class="sub">Classes, functions, and protocols organized by module.</p>
+    </div>
+
+    <!-- Module nav -->
+    <div class="api-nav">
+      
+      <a href="#ragforge-core-schemas" class="api-nav-link">schemas</a>
+      
+      <a href="#ragforge-core-telemetry" class="api-nav-link">telemetry</a>
+      
+      <a href="#ragforge-ingestion" class="api-nav-link">ingestion</a>
+      
+      <a href="#ragforge-retrieval-bm25" class="api-nav-link">bm25</a>
+      
+      <a href="#ragforge-retrieval-dense" class="api-nav-link">dense</a>
+      
+      <a href="#ragforge-retrieval-embeddings" class="api-nav-link">embeddings</a>
+      
+      <a href="#ragforge-retrieval-fusion" class="api-nav-link">fusion</a>
+      
+      <a href="#ragforge-retrieval-reranking" class="api-nav-link">reranking</a>
+      
+      <a href="#ragforge-retrieval-pipeline" class="api-nav-link">pipeline</a>
+      
+      <a href="#ragforge-generation" class="api-nav-link">generation</a>
+      
+      <a href="#ragforge-evaluation" class="api-nav-link">evaluation</a>
+      
+    </div>
+
+    
+    <div class="api-module" id="ragforge-core-schemas">
+      <div class="api-module-header">
+        <h3>ragforge.core.schemas</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/core/schemas.py" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Shared data objects — the common language of the whole system.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>Document</code>
+            <span class="api-kind dataclass">dataclass</span>
+          </div>
+          <p>A fully loaded source document with doc_id, text, and metadata.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>Chunk</code>
+            <span class="api-kind dataclass">dataclass</span>
+          </div>
+          <p>A smaller piece of a Document. Carries chunk_id, doc_id, text, and metadata including chunk_index.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>RetrievalResult</code>
+            <span class="api-kind dataclass">dataclass</span>
+          </div>
+          <p>A ranked result from any retriever. Contains the Chunk, a float score, and the source method name.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-core-telemetry">
+      <div class="api-module-header">
+        <h3>ragforge.core.telemetry</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/core/telemetry.py" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Lightweight observability — per-stage latency tracking.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>StageTiming</code>
+            <span class="api-kind dataclass">dataclass</span>
+          </div>
+          <p>A single (stage_name, duration_ms) timing entry.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>PipelineTrace</code>
+            <span class="api-kind dataclass">dataclass</span>
+          </div>
+          <p>Collects StageTiming entries and arbitrary metadata. Use .add_stage() to record, .total_duration_ms to sum.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-ingestion">
+      <div class="api-module-header">
+        <h3>ragforge.ingestion</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/ingestion/" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Document loading and chunking.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>load_text_documents(data_dir)</code>
+            <span class="api-kind function">function</span>
+          </div>
+          <p>Load all .txt files from a directory into Document objects. Skips empty files. Returns list[Document].</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>chunk_text(text, chunk_size, overlap)</code>
+            <span class="api-kind function">function</span>
+          </div>
+          <p>Split a string into overlapping character-based chunks. Returns list[str].</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>chunk_documents(documents, chunk_size, overlap)</code>
+            <span class="api-kind function">function</span>
+          </div>
+          <p>Convert list[Document] into list[Chunk], preserving doc_id lineage and chunk_index in metadata.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-retrieval-bm25">
+      <div class="api-module-header">
+        <h3>ragforge.retrieval.bm25</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/retrieval/bm25.py" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Sparse retrieval using BM25 probabilistic ranking.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>tokenize(text)</code>
+            <span class="api-kind function">function</span>
+          </div>
+          <p>Lowercase whitespace tokenizer for BM25 indexing.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>BM25Retriever</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>Sparse retriever wrapping rank_bm25.BM25Okapi. Initialize with chunks, call .search(query, top_k) to retrieve.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-retrieval-dense">
+      <div class="api-module-header">
+        <h3>ragforge.retrieval.dense</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/retrieval/dense.py" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Dense semantic retrieval using embeddings + FAISS.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>DenseRetriever</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>Vector search over chunk embeddings. Initialize with chunks + a TextEmbedder. Call .search(query, top_k) to retrieve by cosine similarity.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-retrieval-embeddings">
+      <div class="api-module-header">
+        <h3>ragforge.retrieval.embeddings</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/retrieval/embeddings.py" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Embedding interfaces and implementations.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>TextEmbedder</code>
+            <span class="api-kind protocol">protocol</span>
+          </div>
+          <p>Interface for any embedding model. Must implement .encode(texts) → np.ndarray. Swap in OpenAI, Cohere, or any provider.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>SentenceTransformerEmbedder</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>Concrete embedder wrapping sentence-transformers. Default model: all-MiniLM-L6-v2 (384d). Outputs normalized float32 vectors.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-retrieval-fusion">
+      <div class="api-module-header">
+        <h3>ragforge.retrieval.fusion</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/retrieval/fusion.py" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Reciprocal Rank Fusion for combining retriever outputs.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>reciprocal_rank_fusion(result_lists, top_k, k)</code>
+            <span class="api-kind function">function</span>
+          </div>
+          <p>Merge multiple ranked lists using RRF. Combines ranks, not scores. Formula: score = Σ 1/(k + rank). Default k=60.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-retrieval-reranking">
+      <div class="api-module-header">
+        <h3>ragforge.retrieval.reranking</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/retrieval/reranking.py" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Cross-encoder reranking for precision-optimized results.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>QueryDocumentScorer</code>
+            <span class="api-kind protocol">protocol</span>
+          </div>
+          <p>Interface for scoring (query, document) pairs. Must implement .score(query, texts) → list[float].</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>CrossEncoderScorer</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>Concrete scorer wrapping cross-encoder models. Default: ms-marco-MiniLM-L-6-v2.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>RetrievalReranker</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>Reranks a list of RetrievalResults using a QueryDocumentScorer. Call .rerank(query, results, top_k).</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-retrieval-pipeline">
+      <div class="api-module-header">
+        <h3>ragforge.retrieval.pipeline</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/retrieval/pipeline.py" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Ready-to-use retrieval pipelines combining all components.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>BM25Pipeline</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>End-to-end sparse retrieval. Build with .from_directory(path) or .from_documents(docs). Call .search(query, top_k).</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>DensePipeline</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>End-to-end dense retrieval. Same interface. Accepts optional custom TextEmbedder.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>HybridPipeline</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>BM25 + Dense + RRF fusion. The core hybrid retriever. Accepts rrf_k parameter.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>RerankedHybridPipeline</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>HybridPipeline + cross-encoder reranking. The most complete retrieval pipeline. Accepts candidate_top_k for the reranking pool size.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-generation">
+      <div class="api-module-header">
+        <h3>ragforge.generation</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/generation/" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Context construction and LLM-based answer generation.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>ContextBuilder</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>Assembles retrieval results into prompt-ready context with citation IDs. Respects max_chunks and max_chars budget.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>ChatLLM</code>
+            <span class="api-kind protocol">protocol</span>
+          </div>
+          <p>Interface for chat LLMs. Must implement .generate(system_prompt, user_prompt) → LLMResponse.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>ExtractiveFallbackLLM</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>Offline-safe fallback that extracts answers from context without an external API.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>OpenAICompatibleLLM</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>Minimal client for any OpenAI-compatible API. Uses stdlib only (no openai package needed).</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>RAGPipeline</code>
+            <span class="api-kind class">class</span>
+          </div>
+          <p>End-to-end retrieval → context → generation pipeline. Call .answer(query) to get a GenerationResponse with trace.</p>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="api-module" id="ragforge-evaluation">
+      <div class="api-module-header">
+        <h3>ragforge.evaluation</h3>
+        <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/tree/main/src/ragforge/evaluation/" class="api-source-link" target="_blank">source</a>
+      </div>
+      <p class="api-module-desc">Retrieval and answer quality evaluation.</p>
+      <div class="api-members">
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>evaluate_retrieval(pipeline, samples, top_k)</code>
+            <span class="api-kind function">function</span>
+          </div>
+          <p>Evaluate a retrieval pipeline on labeled queries. Returns RetrievalEvaluationReport with Hit Rate@k, MRR@k, Recall@k.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>evaluate_answer_heuristics(sample, response)</code>
+            <span class="api-kind function">function</span>
+          </div>
+          <p>Fast heuristic checks: answer_present, cites_context, grounded_to_relevant_context, reference_term_overlap.</p>
+        </div>
+        
+        <div class="api-member">
+          <div class="api-member-name">
+            <code>build_llm_judge_prompts(sample, response)</code>
+            <span class="api-kind function">function</span>
+          </div>
+          <p>Build rubric prompt for LLM-as-judge scoring (groundedness, correctness, completeness, overall).</p>
+        </div>
+        
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- ═══════════════ BACK TO HOME ═══════════════ -->
+  <section style="padding: 40px 0; text-align: center;">
+    <a href="/raglab-site/" style="font-size: 12px; color: var(--text-dim);">← back to raglab_ home</a>
+    <span style="color: var(--border); margin: 0 12px;">|</span>
+    <a href="https://github.com/Vaibhav1196/hybrid-rag-lab" target="_blank" style="font-size: 12px; color: var(--text-dim);">view source on github →</a>
+  </section>
+
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <span>raglab_ — built in public by <a href="https://twitter.com/yourname">@vaibhav</a></span>
+  <div class="footer-links">
+    <a href="https://github.com/Vaibhav1196/hybrid-rag-lab" target="_blank">github</a>
+    <a href="https://huggingface.co/yourname" target="_blank">huggingface</a>
+    <a href="https://twitter.com/yourname" target="_blank">twitter</a>
+  </div>
+</footer>
+
+<script>
+// Client-side Python syntax highlighter
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('code.lang-python').forEach(function(block) {
+    var html = block.innerHTML;
+    html = html.replace(/(#.*?)(\n|$)/g, '<span class="syn-cm">$1</span>$2');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/\b(from|import|for|in|if|else|elif|def|class|return|as|with|not|and|or|is|None|True|False)\b/g, '<span class="syn-kw">$1</span>');
+    html = html.replace(/\b(print|len|range|set|list|dict|tuple|int|float|str|type|sum|max|min|sorted|enumerate)\b/g, '<span class="syn-bi">$1</span>');
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="syn-num">$1</span>');
+    html = html.replace(/\.(\w+)\(/g, '.<span class="syn-fn">$1</span>(');
+    html = html.replace(/\b([A-Z][a-zA-Z]*(?:Pipeline|Builder|LLM|Embedder|Retriever|Reranker|Scorer|Result|Response|Trace|Timing|Snippet|Context|Document|Chunk|Report|Metrics|Sample))\b/g, '<span class="syn-cls">$1</span>');
+    block.innerHTML = html;
+  });
+
+  document.querySelectorAll('code.lang-bash, code.lang-bash-inline').forEach(function(block) {
+    var html = block.innerHTML;
+    html = html.replace(/^\$\s/gm, '<span class="syn-pr">$ </span>');
+    html = html.replace(/(--[\w-]+)/g, '<span class="syn-fl">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/(https?:\/\/\S+)/g, '<span class="syn-arg">$1</span>');
+    block.innerHTML = html;
+  });
+});
+</script>
+
+</body>
+</html>

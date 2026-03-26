@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>raglab_ — building RAG pipelines in public</title>
+  <meta name="description" content="One person building a hybrid RAG framework from scratch — ragforge — and documenting every step. Read the code, try the demos, learn the architecture.">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/raglab-site/assets/css/style.css">
+</head>
+<body>
+  <!-- ═══════════════ TOP BAR ═══════════════ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo">raglab_</span>
+    <span class="topbar-sep">|</span>
+    <span class="topbar-status"><span class="status-dot"></span> building RAG pipelines in public</span>
+  </div>
+  <div class="topbar-links">
+    <a href="#demos">demos</a>
+    <a href="#examples">examples</a>
+    <a href="#log">log</a>
+    <a href="#roadmap">roadmap</a>
+    <a href="/raglab-site/docs">docs</a>
+    <a href="https://github.com/Vaibhav1196/hybrid-rag-lab" target="_blank">github ↗</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section class="hero">
+    <div class="terminal">
+      <div class="term-header">
+        <div class="term-dot r"></div>
+        <div class="term-dot y"></div>
+        <div class="term-dot g"></div>
+        <span>~/hybrid-rag-lab</span>
+      </div>
+      <div class="term-body">
+        
+        <div class="term-line">
+          
+              <span class="prompt">$</span> pip install ragforge
+            
+        </div>
+        
+        <div class="term-line">
+          
+              &nbsp;
+          
+        </div>
+        
+        <div class="term-line">
+          
+              <span class="highlight"># ragforge</span>
+            
+        </div>
+        
+        <div class="term-line">
+          
+              <span class="output">hybrid RAG framework for Python.</span>
+            
+        </div>
+        
+        <div class="term-line">
+          
+              <span class="output">BM25 + Dense + RRF Fusion + Cross-Encoder Reranking.</span>
+            
+        </div>
+        
+        <div class="term-line">
+          
+              <span class="highlight">evaluation suite. observability. protocol-based. swappable.</span>
+            
+        </div>
+        
+        <div class="term-line">
+          
+              &nbsp;
+          
+        </div>
+        
+        <div class="term-line">
+          
+              <span class="comment"># v0.1.0 — src-layout package, 13 test files, CLI scripts</span>
+            
+        </div>
+        
+        <div class="term-line">
+          
+              <span class="comment"># built in public at github.com/Vaibhav1196/hybrid-rag-lab</span>
+            
+        </div>
+        
+        <div class="term-line">
+          
+              &nbsp;
+          
+        </div>
+        
+        <div class="term-line">
+          
+              <span class="prompt">$</span> raglab <span class="flag">--list-stages</span><span class="cursor"></span>
+            
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ LIVE DEMOS ═══════════════ -->
+  <section class="section" id="demos">
+    <div class="section-head">
+      <div class="comment-line">// try ragforge in the browser — no install needed</div>
+      <h2><span class="accent">$</span> live demos</h2>
+    </div>
+    <div class="demos-grid">
+      
+      <div class="demo-card">
+        <div class="card-status planned">
+          <span class="status-dot-card"></span> planned
+        </div>
+        <h3>Hybrid Retrieval Comparison</h3>
+        <p>BM25 vs Dense vs Hybrid (RRF) side by side. Upload docs or use the sample corpus, query all three methods, compare ranked results.</p>
+        <div class="card-footer">
+          
+          <span class="card-tag">BM25</span>
+          
+          <span class="card-tag">FAISS</span>
+          
+          <span class="card-tag">RRF</span>
+          
+        </div>
+        
+          <span class="try-btn planned">coming soon</span>
+        
+      </div>
+      
+      <div class="demo-card">
+        <div class="card-status planned">
+          <span class="status-dot-card"></span> planned
+        </div>
+        <h3>Reranker Impact Test</h3>
+        <p>See how cross-encoder reranking reorders hybrid results. Compare before/after rankings on the same query.</p>
+        <div class="card-footer">
+          
+          <span class="card-tag">cross-encoder</span>
+          
+          <span class="card-tag">ms-marco-MiniLM</span>
+          
+        </div>
+        
+          <span class="try-btn planned">coming soon</span>
+        
+      </div>
+      
+      <div class="demo-card">
+        <div class="card-status planned">
+          <span class="status-dot-card"></span> planned
+        </div>
+        <h3>Retrieval Evaluation Dashboard</h3>
+        <p>Run the eval suite live. See Hit Rate, MRR, Recall@k across all pipeline tiers on different eval datasets.</p>
+        <div class="card-footer">
+          
+          <span class="card-tag">Hit Rate</span>
+          
+          <span class="card-tag">MRR</span>
+          
+          <span class="card-tag">Recall@k</span>
+          
+        </div>
+        
+          <span class="try-btn planned">coming soon</span>
+        
+      </div>
+      
+      <div class="demo-card">
+        <div class="card-status planned">
+          <span class="status-dot-card"></span> planned
+        </div>
+        <h3>End-to-End RAG Playground</h3>
+        <p>Full pipeline: upload docs → retrieve → generate answer with citations. Inspect the PipelineTrace for latency breakdown.</p>
+        <div class="card-footer">
+          
+          <span class="card-tag">RAGPipeline</span>
+          
+          <span class="card-tag">ContextBuilder</span>
+          
+          <span class="card-tag">PipelineTrace</span>
+          
+        </div>
+        
+          <span class="try-btn planned">coming soon</span>
+        
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- ═══════════════ EXAMPLES ═══════════════ -->
+  <section class="section" id="examples">
+    <div class="section-head">
+      <div class="comment-line">// copy-paste recipes</div>
+      <h2><span class="accent">$</span> examples</h2>
+      <p class="sub">Want the full API reference and installation guide? <a href="/raglab-site/docs">Read the docs →</a></p>
+    </div>
+
+    
+    <div class="example-block">
+      <div class="example-header">
+        <h3>Compare all 4 retrieval tiers</h3>
+        <p>Run BM25, Dense, Hybrid, and Reranked on the same query and see how results differ.</p>
+      </div>
+      <div class="code-block">
+        <div class="code-label python">python</div>
+        <pre><code class="lang-python">from ragforge.retrieval.pipeline import (
+    BM25Pipeline, DensePipeline, HybridPipeline, RerankedHybridPipeline
+)
+
+bm25     = BM25Pipeline.from_directory(&quot;data/&quot;)
+dense    = DensePipeline.from_directory(&quot;data/&quot;)
+hybrid   = HybridPipeline.from_directory(&quot;data/&quot;)
+reranked = RerankedHybridPipeline.from_directory(&quot;data/&quot;)
+
+query = &quot;how to combine different search methods&quot;
+
+for name, pipe in [(&quot;BM25&quot;, bm25), (&quot;Dense&quot;, dense), (&quot;Hybrid&quot;, hybrid), (&quot;Reranked&quot;, reranked)]:
+    results = pipe.search(query, top_k=3)
+    print(f&quot;\n--- {name} ---&quot;)
+    for r in results:
+        print(f&quot;  {r.score:.4f}  {r.chunk.doc_id}&quot;)
+</code></pre>
+      </div>
+    </div>
+    
+    <div class="example-block">
+      <div class="example-header">
+        <h3>Swap in a custom embedding model</h3>
+        <p>Use the TextEmbedder protocol to plug in any embedding provider.</p>
+      </div>
+      <div class="code-block">
+        <div class="code-label python">python</div>
+        <pre><code class="lang-python">from ragforge.retrieval.embeddings import SentenceTransformerEmbedder
+from ragforge.retrieval.pipeline import DensePipeline
+
+# Use a different model — any sentence-transformers model works
+embedder = SentenceTransformerEmbedder(model_name=&quot;all-mpnet-base-v2&quot;)
+
+pipeline = DensePipeline.from_directory(&quot;data/&quot;, embedder=embedder)
+results = pipeline.search(&quot;semantic similarity&quot;, top_k=3)
+</code></pre>
+      </div>
+    </div>
+    
+    <div class="example-block">
+      <div class="example-header">
+        <h3>End-to-end RAG with the fallback LLM</h3>
+        <p>Run the full pipeline offline — no API key needed.</p>
+      </div>
+      <div class="code-block">
+        <div class="code-label python">python</div>
+        <pre><code class="lang-python">from ragforge.retrieval.pipeline import RerankedHybridPipeline
+from ragforge.generation.pipeline import RAGPipeline
+
+retriever = RerankedHybridPipeline.from_directory(&quot;data/&quot;)
+rag = RAGPipeline.with_fallback_llm(retrieval_pipeline=retriever)
+
+response = rag.answer(&quot;What is hybrid retrieval?&quot;, retrieval_top_k=3)
+
+print(response.answer)
+print(f&quot;Latency: {response.trace.total_duration_ms:.1f}ms&quot;)
+</code></pre>
+      </div>
+    </div>
+    
+    <div class="example-block">
+      <div class="example-header">
+        <h3>End-to-end RAG with OpenAI</h3>
+        <p>Plug in any OpenAI-compatible API for real LLM generation.</p>
+      </div>
+      <div class="code-block">
+        <div class="code-label python">python</div>
+        <pre><code class="lang-python">from ragforge.retrieval.pipeline import RerankedHybridPipeline
+from ragforge.generation.pipeline import RAGPipeline
+from ragforge.generation.context import ContextBuilder
+from ragforge.generation.llm import OpenAICompatibleLLM
+
+retriever = RerankedHybridPipeline.from_directory(&quot;data/&quot;)
+llm = OpenAICompatibleLLM(model_name=&quot;gpt-4.1-mini&quot;)
+
+rag = RAGPipeline(
+    retrieval_pipeline=retriever,
+    context_builder=ContextBuilder(max_chunks=4, max_chars=1800),
+    llm=llm,
+)
+
+response = rag.answer(&quot;What is hybrid retrieval?&quot;)
+print(response.answer)
+</code></pre>
+      </div>
+    </div>
+    
+    <div class="example-block">
+      <div class="example-header">
+        <h3>Evaluate retrieval quality</h3>
+        <p>Run the eval suite and get Hit Rate, MRR, and Recall@k.</p>
+      </div>
+      <div class="code-block">
+        <div class="code-label python">python</div>
+        <pre><code class="lang-python">from ragforge.retrieval.pipeline import HybridPipeline
+from ragforge.evaluation.retrieval import evaluate_retrieval
+from ragforge.evaluation.datasets import load_retrieval_samples
+
+pipeline = HybridPipeline.from_directory(&quot;data/&quot;)
+samples = load_retrieval_samples(&quot;data/evals/retrieval_eval.jsonl&quot;)
+
+report = evaluate_retrieval(pipeline, samples, top_k=5)
+
+print(f&quot;Hit Rate@5: {report.metrics.hit_rate:.2f}&quot;)
+print(f&quot;MRR@5:      {report.metrics.mean_reciprocal_rank:.2f}&quot;)
+print(f&quot;Recall@5:   {report.metrics.recall_at_k:.2f}&quot;)
+</code></pre>
+      </div>
+    </div>
+    
+    <div class="example-block">
+      <div class="example-header">
+        <h3>Inspect pipeline latency</h3>
+        <p>Use PipelineTrace to see where time is spent.</p>
+      </div>
+      <div class="code-block">
+        <div class="code-label python">python</div>
+        <pre><code class="lang-python">response = rag.answer(&quot;What is RAG?&quot;)
+
+for timing in response.trace.stage_timings:
+    print(f&quot;  {timing.stage}: {timing.duration_ms:.1f}ms&quot;)
+
+print(f&quot;  TOTAL: {response.trace.total_duration_ms:.1f}ms&quot;)
+# → retrieval: 12.3ms
+# → context_construction: 0.3ms
+# → llm_generation: 1842.1ms
+</code></pre>
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- ═══════════════ BUILD LOG ═══════════════ -->
+  <section class="section" id="log">
+    <div class="section-head">
+      <div class="comment-line">// what's been built</div>
+      <h2><span class="accent">$</span> git log <span style="color:var(--text-dim)">--oneline</span></h2>
+    </div>
+    <div class="log-entries">
+      
+      <div class="log-entry">
+        <span class="log-date">2026-03-23</span>
+        <span class="log-type milestone">
+          v0.1.0
+          
+        </span>
+        <span class="log-msg">ragforge v0.1.0 — full hybrid RAG pipeline with evaluation suite and observability</span>
+        
+          <a href="https://github.com/Vaibhav1196/hybrid-rag-lab" class="log-link" target="_blank">→ repo</a>
+        
+      </div>
+      
+      <div class="log-entry">
+        <span class="log-date">2026-03-23</span>
+        <span class="log-type release">
+          release
+            
+        </span>
+        <span class="log-msg">30-page masterclass PDF published — 15 chapters covering the full architecture</span>
+        
+          <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/docs/hybrid_rag_masterclass.pdf" class="log-link" target="_blank">→ PDF</a>
+        
+      </div>
+      
+      <div class="log-entry">
+        <span class="log-date">2026-03-22</span>
+        <span class="log-type experiment">
+          exper.
+            
+        </span>
+        <span class="log-msg">dual answer evaluation — heuristic checks + LLM-as-judge with rubric prompts</span>
+        
+          <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/src/ragforge/evaluation/generation.py" class="log-link" target="_blank">→ source</a>
+        
+      </div>
+      
+      <div class="log-entry">
+        <span class="log-date">2026-03-20</span>
+        <span class="log-type finding">
+          finding
+            
+        </span>
+        <span class="log-msg">reranked hybrid hits MRR@5 = 1.00 on easy eval set vs BM25-only at 0.75</span>
+        
+          <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/scripts/run_retrieval_eval.py" class="log-link" target="_blank">→ eval script</a>
+        
+      </div>
+      
+      <div class="log-entry">
+        <span class="log-date">2026-03-18</span>
+        <span class="log-type experiment">
+          exper.
+            
+        </span>
+        <span class="log-msg">PipelineTrace shows retrieval 12ms, context build 0.3ms, LLM generation dominates at 1.8s</span>
+        
+          <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/src/ragforge/core/telemetry.py" class="log-link" target="_blank">→ telemetry</a>
+        
+      </div>
+      
+      <div class="log-entry">
+        <span class="log-date">2026-03-15</span>
+        <span class="log-type release">
+          release
+            
+        </span>
+        <span class="log-msg">end-to-end RAG pipeline — ExtractiveFallbackLLM for offline + OpenAI-compatible client</span>
+        
+          <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/src/ragforge/generation/pipeline.py" class="log-link" target="_blank">→ source</a>
+        
+      </div>
+      
+      <div class="log-entry">
+        <span class="log-date">2026-03-12</span>
+        <span class="log-type experiment">
+          exper.
+            
+        </span>
+        <span class="log-msg">RRF fusion (k=60) on sample docs — hybrid retrieval hits 100% recall vs BM25's 88%</span>
+        
+          <a href="https://github.com/Vaibhav1196/hybrid-rag-lab/blob/main/src/ragforge/retrieval/fusion.py" class="log-link" target="_blank">→ source</a>
+        
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- ═══════════════ ROADMAP ═══════════════ -->
+  <section class="section" id="roadmap">
+    <div class="section-head">
+      <div class="comment-line">// where ragforge is headed</div>
+      <h2><span class="accent">$</span> roadmap</h2>
+    </div>
+
+    
+    
+    <div class="roadmap-group">
+      <div class="roadmap-horizon">next</div>
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">FastAPI HTTP server</span>
+        <span class="roadmap-desc">Wrap the pipeline in an API. Query endpoint, health checks, structured JSON responses.</span>
+      </div>
+      
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">Embedding cache</span>
+        <span class="roadmap-desc">Cache embeddings to avoid re-embedding unchanged documents. FAISS or Qdrant backed.</span>
+      </div>
+      
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">Advanced chunking</span>
+        <span class="roadmap-desc">Sentence-aware, token-based, and semantic chunking strategies. Compare retrieval quality.</span>
+      </div>
+      
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">PDF / HTML / Markdown ingestion</span>
+        <span class="roadmap-desc">Support real-world document formats beyond .txt files.</span>
+      </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+    <div class="roadmap-group">
+      <div class="roadmap-horizon">later</div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">Query routing</span>
+        <span class="roadmap-desc">Route keyword queries to BM25, semantic queries to dense retrieval automatically.</span>
+      </div>
+      
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">Multi-agent orchestration</span>
+        <span class="roadmap-desc">LangGraph integration — planner, retriever, and generator agents.</span>
+      </div>
+      
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">OpenTelemetry export</span>
+        <span class="roadmap-desc">Export PipelineTrace data to OpenTelemetry or LangSmith for production monitoring.</span>
+      </div>
+      
+      
+      
+      
+      
+      
+    </div>
+    
+    <div class="roadmap-group">
+      <div class="roadmap-horizon">research</div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">HyDE (Hypothetical Document Embeddings)</span>
+        <span class="roadmap-desc">Generate a hypothetical answer, embed it, use that for retrieval instead of the raw query.</span>
+      </div>
+      
+      
+      
+      <div class="roadmap-item">
+        <span class="roadmap-title">SPLADE / ColBERT</span>
+        <span class="roadmap-desc">Learned sparse retrieval and late-interaction models as alternatives to BM25 + bi-encoder.</span>
+      </div>
+      
+      
+    </div>
+    
+  </section>
+
+  <!-- ═══════════════ NEWSLETTER ═══════════════ -->
+  <section class="newsletter">
+    <div class="comment-line" style="color:var(--comment);font-size:12px;margin-bottom:8px;">// get notified when I ship new pipeline stages</div>
+    <p>No spam. Just a short email when a new stage goes live or when I find something worth sharing.</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="you@email.com">
+      <button>subscribe</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <span>raglab_ — built in public by <a href="https://twitter.com/yourname">@vaibhav</a></span>
+  <div class="footer-links">
+    <a href="https://github.com/Vaibhav1196/hybrid-rag-lab" target="_blank">github</a>
+    <a href="https://huggingface.co/yourname" target="_blank">huggingface</a>
+    <a href="https://twitter.com/yourname" target="_blank">twitter</a>
+  </div>
+</footer>
+
+<script>
+// Client-side Python syntax highlighter
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('code.lang-python').forEach(function(block) {
+    var html = block.innerHTML;
+    // Comments (must be first to avoid conflicts)
+    html = html.replace(/(#.*?)(\n|$)/g, '<span class="syn-cm">$1</span>$2');
+    // Strings — double then single quotes
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="syn-str">$1</span>');
+    // Keywords
+    html = html.replace(/\b(from|import|for|in|if|else|elif|def|class|return|as|with|not|and|or|is|None|True|False)\b/g, '<span class="syn-kw">$1</span>');
+    // Builtins
+    html = html.replace(/\b(print|len|range|set|list|dict|tuple|int|float|str|type|sum|max|min|sorted|enumerate)\b/g, '<span class="syn-bi">$1</span>');
+    // Numbers
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="syn-num">$1</span>');
+    // Function/method calls
+    html = html.replace(/\.(\w+)\(/g, '.<span class="syn-fn">$1</span>(');
+    // Class-like names (capitalized words after import or =)
+    html = html.replace(/\b([A-Z][a-zA-Z]+(?:Pipeline|Builder|LLM|Embedder|Retriever|Reranker|Scorer|Result|Response|Trace|Timing|Snippet|Context|Document|Chunk|Report|Metrics|Sample))\b/g, '<span class="syn-cls">$1</span>');
+    block.innerHTML = html;
+  });
+
+  // Bash highlighting
+  document.querySelectorAll('code.lang-bash').forEach(function(block) {
+    var html = block.innerHTML;
+    html = html.replace(/^\$\s/gm, '<span class="syn-pr">$ </span>');
+    html = html.replace(/(--[\w-]+)/g, '<span class="syn-fl">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/(https?:\/\/\S+)/g, '<span class="syn-arg">$1</span>');
+    block.innerHTML = html;
+  });
+});
+</script>
+
+</body>
+</html>

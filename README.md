@@ -35,7 +35,8 @@ gem install jekyll bundler
 ```bash
 cd ~/path/to/raglab-site
 
-# If present
+
+# If exists
 rm -f Gemfile.lock
 
 # First time only (or after Gemfile changes)

@@ -1,104 +1,104 @@
 # ──────────────────────────────────────────────
-# Examples / Recipes — with syntax highlighting
+# Examples / Recipes
 # ──────────────────────────────────────────────
 
 - title: "Compare all 4 retrieval tiers"
   description: "Run BM25, Dense, Hybrid, and Reranked on the same query and see how results differ."
   lang: python
-  code_html: |
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.retrieval.pipeline</span> <span class="syn-kw">import</span> (
-        <span class="syn-cls">BM25Pipeline</span>, <span class="syn-cls">DensePipeline</span>, <span class="syn-cls">HybridPipeline</span>, <span class="syn-cls">RerankedHybridPipeline</span>
+  code: |
+    from ragforge.retrieval.pipeline import (
+        BM25Pipeline, DensePipeline, HybridPipeline, RerankedHybridPipeline
     )
 
-    bm25     <span class="syn-op">=</span> <span class="syn-cls">BM25Pipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>)
-    dense    <span class="syn-op">=</span> <span class="syn-cls">DensePipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>)
-    hybrid   <span class="syn-op">=</span> <span class="syn-cls">HybridPipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>)
-    reranked <span class="syn-op">=</span> <span class="syn-cls">RerankedHybridPipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>)
+    bm25     = BM25Pipeline.from_directory("data/")
+    dense    = DensePipeline.from_directory("data/")
+    hybrid   = HybridPipeline.from_directory("data/")
+    reranked = RerankedHybridPipeline.from_directory("data/")
 
-    query <span class="syn-op">=</span> <span class="syn-str">"how to combine different search methods"</span>
+    query = "how to combine different search methods"
 
-    <span class="syn-kw">for</span> name, pipe <span class="syn-kw">in</span> [(<span class="syn-str">"BM25"</span>, bm25), (<span class="syn-str">"Dense"</span>, dense), (<span class="syn-str">"Hybrid"</span>, hybrid), (<span class="syn-str">"Reranked"</span>, reranked)]:
-        results <span class="syn-op">=</span> pipe.<span class="syn-fn">search</span>(query, top_k<span class="syn-op">=</span><span class="syn-num">3</span>)
-        <span class="syn-bi">print</span>(<span class="syn-str">f"\n--- {name} ---"</span>)
-        <span class="syn-kw">for</span> r <span class="syn-kw">in</span> results:
-            <span class="syn-bi">print</span>(<span class="syn-str">f"  {r.score:.4f}  {r.chunk.doc_id}"</span>)
+    for name, pipe in [("BM25", bm25), ("Dense", dense), ("Hybrid", hybrid), ("Reranked", reranked)]:
+        results = pipe.search(query, top_k=3)
+        print(f"\n--- {name} ---")
+        for r in results:
+            print(f"  {r.score:.4f}  {r.chunk.doc_id}")
 
 - title: "Swap in a custom embedding model"
   description: "Use the TextEmbedder protocol to plug in any embedding provider."
   lang: python
-  code_html: |
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.retrieval.embeddings</span> <span class="syn-kw">import</span> <span class="syn-cls">SentenceTransformerEmbedder</span>
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.retrieval.pipeline</span> <span class="syn-kw">import</span> <span class="syn-cls">DensePipeline</span>
+  code: |
+    from ragforge.retrieval.embeddings import SentenceTransformerEmbedder
+    from ragforge.retrieval.pipeline import DensePipeline
 
-    <span class="syn-cm"># Use a different model — any sentence-transformers model works</span>
-    embedder <span class="syn-op">=</span> <span class="syn-cls">SentenceTransformerEmbedder</span>(model_name<span class="syn-op">=</span><span class="syn-str">"all-mpnet-base-v2"</span>)
+    # Use a different model — any sentence-transformers model works
+    embedder = SentenceTransformerEmbedder(model_name="all-mpnet-base-v2")
 
-    pipeline <span class="syn-op">=</span> <span class="syn-cls">DensePipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>, embedder<span class="syn-op">=</span>embedder)
-    results <span class="syn-op">=</span> pipeline.<span class="syn-fn">search</span>(<span class="syn-str">"semantic similarity"</span>, top_k<span class="syn-op">=</span><span class="syn-num">3</span>)
+    pipeline = DensePipeline.from_directory("data/", embedder=embedder)
+    results = pipeline.search("semantic similarity", top_k=3)
 
 - title: "End-to-end RAG with the fallback LLM"
   description: "Run the full pipeline offline — no API key needed."
   lang: python
-  code_html: |
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.retrieval.pipeline</span> <span class="syn-kw">import</span> <span class="syn-cls">RerankedHybridPipeline</span>
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.generation.pipeline</span> <span class="syn-kw">import</span> <span class="syn-cls">RAGPipeline</span>
+  code: |
+    from ragforge.retrieval.pipeline import RerankedHybridPipeline
+    from ragforge.generation.pipeline import RAGPipeline
 
-    retriever <span class="syn-op">=</span> <span class="syn-cls">RerankedHybridPipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>)
-    rag <span class="syn-op">=</span> <span class="syn-cls">RAGPipeline</span>.<span class="syn-fn">with_fallback_llm</span>(retrieval_pipeline<span class="syn-op">=</span>retriever)
+    retriever = RerankedHybridPipeline.from_directory("data/")
+    rag = RAGPipeline.with_fallback_llm(retrieval_pipeline=retriever)
 
-    response <span class="syn-op">=</span> rag.<span class="syn-fn">answer</span>(<span class="syn-str">"What is hybrid retrieval?"</span>, retrieval_top_k<span class="syn-op">=</span><span class="syn-num">3</span>)
+    response = rag.answer("What is hybrid retrieval?", retrieval_top_k=3)
 
-    <span class="syn-bi">print</span>(response.answer)
-    <span class="syn-bi">print</span>(<span class="syn-str">f"Latency: {response.trace.total_duration_ms:.1f}ms"</span>)
+    print(response.answer)
+    print(f"Latency: {response.trace.total_duration_ms:.1f}ms")
 
 - title: "End-to-end RAG with OpenAI"
   description: "Plug in any OpenAI-compatible API for real LLM generation."
   lang: python
-  code_html: |
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.retrieval.pipeline</span> <span class="syn-kw">import</span> <span class="syn-cls">RerankedHybridPipeline</span>
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.generation.pipeline</span> <span class="syn-kw">import</span> <span class="syn-cls">RAGPipeline</span>
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.generation.context</span> <span class="syn-kw">import</span> <span class="syn-cls">ContextBuilder</span>
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.generation.llm</span> <span class="syn-kw">import</span> <span class="syn-cls">OpenAICompatibleLLM</span>
+  code: |
+    from ragforge.retrieval.pipeline import RerankedHybridPipeline
+    from ragforge.generation.pipeline import RAGPipeline
+    from ragforge.generation.context import ContextBuilder
+    from ragforge.generation.llm import OpenAICompatibleLLM
 
-    retriever <span class="syn-op">=</span> <span class="syn-cls">RerankedHybridPipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>)
-    llm <span class="syn-op">=</span> <span class="syn-cls">OpenAICompatibleLLM</span>(model_name<span class="syn-op">=</span><span class="syn-str">"gpt-4.1-mini"</span>)
+    retriever = RerankedHybridPipeline.from_directory("data/")
+    llm = OpenAICompatibleLLM(model_name="gpt-4.1-mini")
 
-    rag <span class="syn-op">=</span> <span class="syn-cls">RAGPipeline</span>(
-        retrieval_pipeline<span class="syn-op">=</span>retriever,
-        context_builder<span class="syn-op">=</span><span class="syn-cls">ContextBuilder</span>(max_chunks<span class="syn-op">=</span><span class="syn-num">4</span>, max_chars<span class="syn-op">=</span><span class="syn-num">1800</span>),
-        llm<span class="syn-op">=</span>llm,
+    rag = RAGPipeline(
+        retrieval_pipeline=retriever,
+        context_builder=ContextBuilder(max_chunks=4, max_chars=1800),
+        llm=llm,
     )
 
-    response <span class="syn-op">=</span> rag.<span class="syn-fn">answer</span>(<span class="syn-str">"What is hybrid retrieval?"</span>)
-    <span class="syn-bi">print</span>(response.answer)
+    response = rag.answer("What is hybrid retrieval?")
+    print(response.answer)
 
 - title: "Evaluate retrieval quality"
   description: "Run the eval suite and get Hit Rate, MRR, and Recall@k."
   lang: python
-  code_html: |
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.retrieval.pipeline</span> <span class="syn-kw">import</span> <span class="syn-cls">HybridPipeline</span>
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.evaluation.retrieval</span> <span class="syn-kw">import</span> <span class="syn-fn">evaluate_retrieval</span>
-    <span class="syn-kw">from</span> <span class="syn-cls">ragforge.evaluation.datasets</span> <span class="syn-kw">import</span> <span class="syn-fn">load_retrieval_samples</span>
+  code: |
+    from ragforge.retrieval.pipeline import HybridPipeline
+    from ragforge.evaluation.retrieval import evaluate_retrieval
+    from ragforge.evaluation.datasets import load_retrieval_samples
 
-    pipeline <span class="syn-op">=</span> <span class="syn-cls">HybridPipeline</span>.<span class="syn-fn">from_directory</span>(<span class="syn-str">"data/"</span>)
-    samples <span class="syn-op">=</span> <span class="syn-fn">load_retrieval_samples</span>(<span class="syn-str">"data/evals/retrieval_eval.jsonl"</span>)
+    pipeline = HybridPipeline.from_directory("data/")
+    samples = load_retrieval_samples("data/evals/retrieval_eval.jsonl")
 
-    report <span class="syn-op">=</span> <span class="syn-fn">evaluate_retrieval</span>(pipeline, samples, top_k<span class="syn-op">=</span><span class="syn-num">5</span>)
+    report = evaluate_retrieval(pipeline, samples, top_k=5)
 
-    <span class="syn-bi">print</span>(<span class="syn-str">f"Hit Rate@5: {report.metrics.hit_rate:.2f}"</span>)
-    <span class="syn-bi">print</span>(<span class="syn-str">f"MRR@5:      {report.metrics.mean_reciprocal_rank:.2f}"</span>)
-    <span class="syn-bi">print</span>(<span class="syn-str">f"Recall@5:   {report.metrics.recall_at_k:.2f}"</span>)
+    print(f"Hit Rate@5: {report.metrics.hit_rate:.2f}")
+    print(f"MRR@5:      {report.metrics.mean_reciprocal_rank:.2f}")
+    print(f"Recall@5:   {report.metrics.recall_at_k:.2f}")
 
 - title: "Inspect pipeline latency"
   description: "Use PipelineTrace to see where time is spent."
   lang: python
-  code_html: |
-    response <span class="syn-op">=</span> rag.<span class="syn-fn">answer</span>(<span class="syn-str">"What is RAG?"</span>)
+  code: |
+    response = rag.answer("What is RAG?")
 
-    <span class="syn-kw">for</span> timing <span class="syn-kw">in</span> response.trace.stage_timings:
-        <span class="syn-bi">print</span>(<span class="syn-str">f"  {timing.stage}: {timing.duration_ms:.1f}ms"</span>)
+    for timing in response.trace.stage_timings:
+        print(f"  {timing.stage}: {timing.duration_ms:.1f}ms")
 
-    <span class="syn-bi">print</span>(<span class="syn-str">f"  TOTAL: {response.trace.total_duration_ms:.1f}ms"</span>)
-    <span class="syn-cm"># → retrieval: 12.3ms</span>
-    <span class="syn-cm"># → context_construction: 0.3ms</span>
-    <span class="syn-cm"># → llm_generation: 1842.1ms</span>
+    print(f"  TOTAL: {response.trace.total_duration_ms:.1f}ms")
+    # → retrieval: 12.3ms
+    # → context_construction: 0.3ms
+    # → llm_generation: 1842.1ms
