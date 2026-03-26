@@ -47,5 +47,6 @@ newsletter_text: "No spam. Just a short email when a new stage goes live or when
 markdown: kramdown
 exclude:
   - README.md
+  - MAINTENANCE.md
   - Gemfile
   - Gemfile.lock
