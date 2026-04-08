@@ -2,37 +2,35 @@
 # Examples / Recipes
 # ──────────────────────────────────────────────
 
-- title: "Benchmark retrieval architectures on one query"
-  description: "Compare BM25, Dense, Hybrid, and Reranked on the same corpus and query to see how each retrieval architecture behaves."
+- title: "Run hybrid retrieval"
+  description: "Build the hybrid pipeline the same way the repo scripts do, then search a local document directory."
   lang: python
   code: |
-    from ragforge.retrieval.pipeline import (
-        BM25Pipeline, DensePipeline, HybridPipeline, RerankedHybridPipeline
+    from ragforge.retrieval.pipeline import HybridPipeline
+
+    pipeline = HybridPipeline.from_directory(
+        data_dir="/path/to/data",
+        chunk_size=300,
+        overlap=50,
+        model_name="all-MiniLM-L6-v2",
+        rrf_k=60,
     )
+    results = pipeline.search(query="hybrid retrieval", top_k=3)
 
-    pipelines = {
-        "bm25": BM25Pipeline.from_directory("data/"),
-        "dense": DensePipeline.from_directory("data/"),
-        "hybrid": HybridPipeline.from_directory("data/"),
-        "reranked": RerankedHybridPipeline.from_directory("data/"),
-    }
-
-    query = "how to combine different search methods"
-
-    for name, pipe in pipelines.items():
-        results = pipe.search(query, top_k=3)
-        print(f"\n--- {name.upper()} ---")
-        for r in results:
-            print(f"  {r.score:.4f}  {r.chunk.doc_id}  {r.source}")
+    for result in results:
+        print(result.score, result.chunk.doc_id, result.source)
 
 - title: "End-to-end RAG with the fallback LLM"
-  description: "Run a fully grounded RAG pipeline offline with the built-in extractive fallback model."
+  description: "Use the reranked retrieval pipeline with the built-in fallback model for an offline end-to-end RAG run."
   lang: python
   code: |
     from ragforge.retrieval.pipeline import RerankedHybridPipeline
     from ragforge.generation.pipeline import RAGPipeline
 
-    retriever = RerankedHybridPipeline.from_directory("data/")
+    retriever = RerankedHybridPipeline.from_directory(
+        data_dir="/path/to/data",
+        candidate_top_k=3,
+    )
     rag = RAGPipeline.with_fallback_llm(retrieval_pipeline=retriever)
 
     response = rag.answer("What is hybrid retrieval?", retrieval_top_k=3)
@@ -41,40 +39,37 @@
     print(f"Latency: {response.trace.total_duration_ms:.1f}ms")
 
 - title: "End-to-end RAG with OpenAI"
-  description: "Swap the fallback model for a hosted OpenAI-compatible model while keeping the same retrieval stack."
+  description: "Keep the same retrieval stack and swap in an OpenAI-compatible backend for answer generation."
   lang: python
   code: |
-    import os
-
     from ragforge.retrieval.pipeline import RerankedHybridPipeline
-    from ragforge.generation.pipeline import RAGPipeline
-    from ragforge.generation.context import ContextBuilder
-    from ragforge.generation.llm import OpenAICompatibleLLM
+    from ragforge.generation import ContextBuilder, OpenAICompatibleLLM, RAGPipeline
 
-    retriever = RerankedHybridPipeline.from_directory("data/")
-    llm = OpenAICompatibleLLM(
-        model_name="gpt-4.1-mini",
-        api_key=os.environ["OPENAI_API_KEY"],
+    retriever = RerankedHybridPipeline.from_directory(
+        data_dir="/path/to/data",
+        candidate_top_k=3,
     )
-
     rag = RAGPipeline(
         retrieval_pipeline=retriever,
         context_builder=ContextBuilder(max_chunks=4, max_chars=1800),
-        llm=llm,
+        llm=OpenAICompatibleLLM(model_name="gpt-4.1-mini"),
     )
 
-    response = rag.answer("What is hybrid retrieval?")
+    response = rag.answer("What is hybrid retrieval?", retrieval_top_k=3)
     print(response.answer)
 
 - title: "Evaluate retrieval quality"
-  description: "Benchmark a retrieval pipeline on a labeled JSONL dataset with Hit Rate, MRR, and Recall@k."
+  description: "Run the same retrieval evaluation flow used by the repo scripts against a labeled JSONL dataset."
   lang: python
   code: |
     from ragforge.retrieval.pipeline import RerankedHybridPipeline
     from ragforge.evaluation import evaluate_retrieval, load_retrieval_samples
 
-    pipeline = RerankedHybridPipeline.from_directory("data/")
-    samples = load_retrieval_samples("data/evals/retrieval_eval.jsonl")
+    pipeline = RerankedHybridPipeline.from_directory(
+        data_dir="/path/to/data",
+        candidate_top_k=3,
+    )
+    samples = load_retrieval_samples("/path/to/retrieval_eval.jsonl")
 
     report = evaluate_retrieval(pipeline, samples, top_k=5)
 

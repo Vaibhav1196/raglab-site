@@ -3,16 +3,16 @@
 # ──────────────────────────────────────────────
 
 install: |
-  $ git clone https://github.com/Vaibhav1196/hybrid-rag-lab.git
-  $ cd hybrid-rag-lab
-  $ uv venv .venv --python 3.11
-  $ uv pip install -e ".[dev]"
+  git clone https://github.com/Vaibhav1196/hybrid-rag-lab.git
+  cd hybrid-rag-lab
+  uv venv .venv --python 3.11
+  uv pip install -e ".[dev]"
 
 example_title: "run hybrid retrieval in 5 lines"
 example: |
   from ragforge.retrieval.pipeline import HybridPipeline
 
-  pipeline = HybridPipeline.from_directory("data/", chunk_size=300, overlap=50)
+  pipeline = HybridPipeline.from_directory("/path/to/data", chunk_size=300, overlap=50)
   results  = pipeline.search("what is hybrid retrieval", top_k=3)
 
   for r in results:
@@ -25,17 +25,17 @@ example_output: |
 
 cli_title: "or use the CLI scripts"
 cli_commands:
-  - cmd: "uv run python scripts/retrieval/run_bm25_retrieval.py --query 'hybrid retrieval' --top-k 3"
+  - cmd: "uv run python scripts/retrieval/run_bm25_retrieval.py --data-dir /path/to/data --query 'hybrid retrieval' --top-k 3"
     label: "Run BM25 retrieval"
-  - cmd: "uv run python scripts/retrieval/run_dense_retrieval.py --query 'hybrid retrieval' --top-k 3"
+  - cmd: "uv run python scripts/retrieval/run_dense_retrieval.py --data-dir /path/to/data --query 'hybrid retrieval' --top-k 3"
     label: "Run dense retrieval"
-  - cmd: "uv run python scripts/retrieval/run_hybrid_retrieval.py --query 'hybrid retrieval' --top-k 3"
+  - cmd: "uv run python scripts/retrieval/run_hybrid_retrieval.py --data-dir /path/to/data --query 'hybrid retrieval' --top-k 3"
     label: "Run hybrid retrieval"
-  - cmd: "uv run python scripts/retrieval/run_reranked_retrieval.py --query 'hybrid retrieval' --top-k 3"
+  - cmd: "uv run python scripts/retrieval/run_reranked_retrieval.py --data-dir /path/to/data --query 'hybrid retrieval' --top-k 3 --candidate-top-k 3"
     label: "Run reranked retrieval"
-  - cmd: "uv run python scripts/generation/run_rag_pipeline.py --query 'What is RAG?' --llm-mode fallback"
+  - cmd: "uv run python scripts/generation/run_rag_pipeline.py --data-dir /path/to/data --query 'What is RAG?' --llm-mode fallback --retrieval-top-k 3 --candidate-top-k 3"
     label: "Run end-to-end RAG"
-  - cmd: "uv run python scripts/evaluation/run_retrieval_evaluation.py --pipeline reranked --eval-path data/evals/retrieval_eval.jsonl"
+  - cmd: "uv run python scripts/evaluation/run_retrieval_evaluation.py --pipeline reranked --data-dir /path/to/data --eval-path /path/to/retrieval_eval.jsonl --top-k 3 --candidate-top-k 3"
     label: "Benchmark retrieval"
-  - cmd: "uv run pytest -v --maxfail=1 --disable-warnings -q"
+  - cmd: "uv run pytest"
     label: "Run the test suite"

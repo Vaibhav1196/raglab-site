@@ -328,20 +328,6 @@ footer a:hover { color: var(--green); }
 .code-block code { color: var(--text-bright); }
 .output-pre { color: var(--text-dim) !important; }
 
-/* ── Syntax highlighting ── */
-.syn-kw { color: #ff79c6; }           /* keywords: from, import, for, if, class, def, return */
-.syn-fn { color: #50fa7b; }           /* function/method names */
-.syn-string { color: #f1fa8c; }       /* strings */
-.syn-cls { color: #8be9fd; }          /* class names */
-.syn-cm { color: #6272a4; font-style: italic; }  /* comments */
-.syn-num { color: #bd93f9; }          /* numbers */
-.syn-op { color: #ff79c6; }           /* operators: =, ==, ., () */
-.syn-dec { color: #ff79c6; }          /* decorators */
-.syn-bi { color: #ffb86c; }           /* builtins: print, len, range */
-.syn-prompt { color: var(--green); }  /* bash prompt $ */
-.syn-fl { color: var(--amber); }      /* bash flags --flag */
-.syn-arg { color: var(--cyan); }      /* bash arguments / URLs */
-
 /* ── CLI rows ── */
 .cli-row {
   display: flex;

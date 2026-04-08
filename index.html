@@ -178,39 +178,3 @@ layout: default
     {% if site.twitter_url %}<a href="{{ site.twitter_url }}" target="_blank">twitter</a>{% endif %}
   </div>
 </footer>
-
-<script>
-// Client-side Python syntax highlighter
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('code.lang-python').forEach(function(block) {
-    var html = block.innerHTML;
-    // Comments (must be first to avoid conflicts)
-    html = html.replace(/(#.*?)(\n|$)/g, '<span class="syn-cm">$1</span>$2');
-    // Strings — double then single quotes
-    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-string">$1</span>');
-    html = html.replace(/('.*?')/g, '<span class="syn-string">$1</span>');
-    // Keywords
-    html = html.replace(/\b(from|import|for|in|if|else|elif|def|class|return|as|with|not|and|or|is|None|True|False)\b/g, '<span class="syn-kw">$1</span>');
-    // Builtins
-    html = html.replace(/\b(print|len|range|set|list|dict|tuple|int|float|str|type|sum|max|min|sorted|enumerate)\b/g, '<span class="syn-bi">$1</span>');
-    // Numbers
-    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="syn-num">$1</span>');
-    // Function/method calls
-    html = html.replace(/\.(\w+)\(/g, '.<span class="syn-fn">$1</span>(');
-    // Class-like names (capitalized words after import or =)
-    html = html.replace(/\b([A-Z][a-zA-Z]+(?:Pipeline|Builder|LLM|Embedder|Retriever|Reranker|Scorer|Result|Response|Trace|Timing|Snippet|Context|Document|Chunk|Report|Metrics|Sample))\b/g, '<span class="syn-cls">$1</span>');
-    block.innerHTML = html;
-  });
-
-  // Bash highlighting
-  document.querySelectorAll('code.lang-bash').forEach(function(block) {
-    var html = block.innerHTML;
-    html = html.replace(/^\$\s/gm, '<span class="syn-prompt">$ </span>');
-    html = html.replace(/(--[\w-]+)/g, '<span class="syn-fl">$1</span>');
-    html = html.replace(/('.*?')/g, '<span class="syn-string">$1</span>');
-    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-string">$1</span>');
-    html = html.replace(/(https?:\/\/\S+)/g, '<span class="syn-arg">$1</span>');
-    block.innerHTML = html;
-  });
-});
-</script>
