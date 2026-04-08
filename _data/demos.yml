@@ -5,14 +5,14 @@
 # Set demo_url when you deploy to HF Spaces
 # ──────────────────────────────────────────────
 
-- title: "Hybrid Retrieval Comparison"
-  status: planned
-  description: "BM25 vs Dense vs Hybrid (RRF) side by side. Upload docs or use the sample corpus, query all three methods, compare ranked results."
+- title: "Document RAG Playground"
+  status: live
+  description: "Upload TXT, PDF, or DOCX files, run BM25, Dense, Hybrid, or Reranked retrieval, and generate grounded answers with either fallback or Hugging Face generation."
   tags:
-    - BM25
-    - FAISS
-    - RRF
-  demo_url: ""
+    - BM25/Dense/Hybrid
+    - reranking
+    - Hugging Face
+  demo_url: "https://huggingface.co/spaces/bot-propagation/raglab-demo-01"
 
 - title: "Reranker Impact Test"
   status: planned
