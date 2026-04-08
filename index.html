@@ -187,8 +187,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Comments (must be first to avoid conflicts)
     html = html.replace(/(#.*?)(\n|$)/g, '<span class="syn-cm">$1</span>$2');
     // Strings — double then single quotes
-    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-str">$1</span>');
-    html = html.replace(/('.*?')/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-string">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="syn-string">$1</span>');
     // Keywords
     html = html.replace(/\b(from|import|for|in|if|else|elif|def|class|return|as|with|not|and|or|is|None|True|False)\b/g, '<span class="syn-kw">$1</span>');
     // Builtins
@@ -205,10 +205,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Bash highlighting
   document.querySelectorAll('code.lang-bash').forEach(function(block) {
     var html = block.innerHTML;
-    html = html.replace(/^\$\s/gm, '<span class="syn-pr">$ </span>');
+    html = html.replace(/^\$\s/gm, '<span class="syn-prompt">$ </span>');
     html = html.replace(/(--[\w-]+)/g, '<span class="syn-fl">$1</span>');
-    html = html.replace(/('.*?')/g, '<span class="syn-str">$1</span>');
-    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-str">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="syn-string">$1</span>');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="syn-string">$1</span>');
     html = html.replace(/(https?:\/\/\S+)/g, '<span class="syn-arg">$1</span>');
     block.innerHTML = html;
   });
