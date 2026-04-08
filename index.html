@@ -181,11 +181,33 @@ layout: default
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  function highlightWithPlaceholders(html, replacements) {
+    var tokens = [];
+
+    function protect(pattern, className, input) {
+      return input.replace(pattern, function(match) {
+        var token = '@@CODE_TOKEN_' + tokens.length + '@@';
+        tokens.push('<span class="' + className + '">' + match + '</span>');
+        return token;
+      });
+    }
+
+    replacements.forEach(function(replacement) {
+      html = protect(replacement.pattern, replacement.className, html);
+    });
+
+    return html.replace(/@@CODE_TOKEN_(\d+)@@/g, function(_, index) {
+      return tokens[Number(index)];
+    });
+  }
+
   document.querySelectorAll('code.lang-python').forEach(function(block) {
     var html = block.innerHTML;
-    html = html.replace(/(#.*?)(\n|$)/g, '<span class="code-comment">$1</span>$2');
-    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="code-string">$1</span>');
-    html = html.replace(/('.*?')/g, '<span class="code-string">$1</span>');
+    html = highlightWithPlaceholders(html, [
+      { pattern: /(&quot;.*?&quot;|".*?")/g, className: 'code-string' },
+      { pattern: /('.*?')/g, className: 'code-string' },
+      { pattern: /(#.*?)(\n|$)/g, className: 'code-comment' }
+    ]);
     html = html.replace(/\b(from|import|for|in|if|else|elif|def|class|return|as|with|not|and|or|is|None|True|False)\b/g, '<span class="code-keyword">$1</span>');
     html = html.replace(/\b(print|len|range|set|list|dict|tuple|int|float|str|type|sum|max|min|sorted|enumerate)\b/g, '<span class="code-builtin">$1</span>');
     html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="code-number">$1</span>');
@@ -196,10 +218,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.querySelectorAll('code.lang-bash').forEach(function(block) {
     var html = block.innerHTML;
+    html = highlightWithPlaceholders(html, [
+      { pattern: /('.*?')/g, className: 'code-string' },
+      { pattern: /(&quot;.*?&quot;|".*?")/g, className: 'code-string' },
+      { pattern: /(https?:\/\/\S+)/g, className: 'shell-argument' }
+    ]);
     html = html.replace(/(--[\w-]+)/g, '<span class="shell-flag">$1</span>');
-    html = html.replace(/('.*?')/g, '<span class="code-string">$1</span>');
-    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="code-string">$1</span>');
-    html = html.replace(/(https?:\/\/\S+)/g, '<span class="shell-argument">$1</span>');
     block.innerHTML = html;
   });
 });
