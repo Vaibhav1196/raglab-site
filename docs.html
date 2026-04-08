@@ -117,3 +117,29 @@ permalink: /docs
     {% if site.twitter_url %}<a href="{{ site.twitter_url }}" target="_blank">twitter</a>{% endif %}
   </div>
 </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('code.lang-python').forEach(function(block) {
+    var html = block.innerHTML;
+    html = html.replace(/(#.*?)(\n|$)/g, '<span class="code-comment">$1</span>$2');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="code-string">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="code-string">$1</span>');
+    html = html.replace(/\b(from|import|for|in|if|else|elif|def|class|return|as|with|not|and|or|is|None|True|False)\b/g, '<span class="code-keyword">$1</span>');
+    html = html.replace(/\b(print|len|range|set|list|dict|tuple|int|float|str|type|sum|max|min|sorted|enumerate)\b/g, '<span class="code-builtin">$1</span>');
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="code-number">$1</span>');
+    html = html.replace(/\.(\w+)\(/g, '.<span class="code-function">$1</span>(');
+    html = html.replace(/\b([A-Z][a-zA-Z]*(?:Pipeline|Builder|LLM|Embedder|Retriever|Reranker|Scorer|Result|Response|Trace|Timing|Snippet|Context|Document|Chunk|Report|Metrics|Sample))\b/g, '<span class="code-class">$1</span>');
+    block.innerHTML = html;
+  });
+
+  document.querySelectorAll('code.lang-bash, code.lang-bash-inline').forEach(function(block) {
+    var html = block.innerHTML;
+    html = html.replace(/(--[\w-]+)/g, '<span class="shell-flag">$1</span>');
+    html = html.replace(/('.*?')/g, '<span class="code-string">$1</span>');
+    html = html.replace(/(&quot;.*?&quot;|".*?")/g, '<span class="code-string">$1</span>');
+    html = html.replace(/(https?:\/\/\S+)/g, '<span class="shell-argument">$1</span>');
+    block.innerHTML = html;
+  });
+});
+</script>

@@ -328,6 +328,17 @@ footer a:hover { color: var(--green); }
 .code-block code { color: var(--text-bright); }
 .output-pre { color: var(--text-dim) !important; }
 
+/* ── Syntax highlighting ── */
+.code-keyword { color: #ff79c6; }
+.code-function { color: #50fa7b; }
+.code-string { color: #f1fa8c; }
+.code-class { color: #8be9fd; }
+.code-comment { color: #6272a4; font-style: italic; }
+.code-number { color: #bd93f9; }
+.code-builtin { color: #ffb86c; }
+.shell-flag { color: var(--amber); }
+.shell-argument { color: var(--cyan); }
+
 /* ── CLI rows ── */
 .cli-row {
   display: flex;
